@@ -1,0 +1,274 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+# Thrift Tutorial
+# Mark Slee (mcslee@facebook.com)
+#
+# This file aims to teach you how to use Thrift, in a .thrift file. Neato. The
+# first thing to notice is that .thrift files support standard shell comments.
+# This lets you make your thrift file executable and include your Thrift build
+# step on the top line. And you can place comments like this anywhere you like.
+#
+# Before running this file, you will need to have installed the thrift compiler
+# into /usr/local/bin.
+
+/**
+ * The first thing to know about are types. The available types in Thrift are:
+ *
+ *  bool        Boolean, one byte
+ *  i8 (byte)   Signed 8-bit integer
+ *  i16         Signed 16-bit integer
+ *  i32         Signed 32-bit integer
+ *  i64         Signed 64-bit integer
+ *  double      64-bit floating point value
+ *  string      String
+ *  binary      Blob (byte array)
+ *  map<t1,t2>  Map from one type to another
+ *  list<t1>    Ordered list of one type
+ *  set<t1>     Set of unique elements of one type
+ *
+ * Did you also notice that Thrift supports C style comments?
+ */
+namespace go asv
+
+struct Rpc_UttInfo {
+    1: string Utt,
+    2: i64 Duration,
+    3: i64 ValidDuration,
+    4: i32 Channels,
+    5: i32 SampRate,
+    6: i32 ErrCode,
+    7: string ErrMsg,
+	8: i32 RetCode
+}
+
+struct Rpc_ModelInfo {
+	1: string Utt,
+	2: string Spkid,
+	3: i32 Size,
+	4: string Language,
+	5: string Gender,
+	6: string Channeltype,
+	7: i32 SampRate,
+	8: i64 Duration,
+	9: i64 ValidDuration,
+	10: string IvFile,
+    11: i32 ErrCode,
+    12: string ErrMsg,
+	13: i32 RetCode
+}
+
+struct Rpc_ScoreInfo {
+	1: string Utt,
+	2: string Spkid,
+	3: double Score,
+	4: i32 SampRate,
+	5: i64 Duration,
+	6: i64 ValidDuration,
+    7: i32 ErrCode,
+    8: string ErrMsg,
+	9: i32 RetCode
+}
+
+struct Rpc_SpeakerScore {
+    1: string Spkid,
+    2: double Score
+}
+
+struct Rpc_TopSpeakerInfo {
+	1: string Utt,
+	2: list<Rpc_SpeakerScore> Scores,
+    3: i32 Top,
+	4: i32 SampRate,
+	5: i64 Duration,
+	6: i64 ValidDuration,
+    7: i32 ErrCode,
+    8: string ErrMsg,
+	9: i32 RetCode
+}
+
+struct Rpc_LicenceInfo {
+	1: string dateStr,
+	2: i32 maxOccurs,
+    3: string fingerprint,
+	4: i32 RetCode
+}
+
+service kvpService {
+	
+    string kvpPing(),    
+
+	/**
+	 *	解析语音文件信息。
+	 *
+	 *	@param [in] wavpath 语音文件路径。
+	 *
+	 *	@return Rpc_UttInfo 返回语音信息。
+	 */
+    Rpc_UttInfo kvpGetUttInfo(1:string wavpath),
+
+	/**
+	 *	将某说话人ID从某个库节点中删除。
+	 *
+	 *	@param [in] vp_node 库节点名称。
+	 *	@param [in] vp_dir 库节点本地路径。
+	 *	@param [in] spk_id 说话人ID。
+	 *	
+	 *	@return KVP_CODE 
+	 */	
+    i32 kvpModelRemoveBySpkid(1:string vp_node, 2:string vp_dir, 3:string spk_id),
+
+	/**
+	 *	注册说话人。
+	 *
+	 *	@param [in] utt 语音路径。
+	 *	@param [in] vp_node 说话人待注册库节点名称。
+	 *	@param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
+	 *	@param [in] spk_id 说话人ID。
+	 *	@param [in] sp_chan 指定处理声道。
+	 *
+	 *	@return Rpc_ModelInfo 说话人模型信息。
+	 */
+    Rpc_ModelInfo kvpRegisterSpeakerByFile(1:string utt, 2:string vp_node, 3:string vp_dir, 4:string spk_id, 5:i32 sp_chan),
+
+	/**
+	 *	1:1验证。
+	 *
+	 *	@param [in] utt 语音路径。
+	 *	@param [in] spk_id 说话人ID。
+	 *	@param [in] vp_node 说话人所在库节点名称。
+	 *	@param [in] utt_type 语音场景类型。
+	 *	@param [in] sp_chan 指定处理声道。
+	 *
+	 *	@return Rpc_ScoreInfo 1:1验证信息。
+	 */
+    Rpc_ScoreInfo kvpVerifySpeakerByFile(1:string utt, 2:string spk_id, 3:string vp_node, 4:i32 utt_type, 5:i32 sp_chan),
+
+	/**
+	 *	1:1验证(给定2段语音进行比较)。
+	 *
+	 *	@param [in] utt1 第1段语音路径。
+	 *	@oaram [in] sp_chan1 指定第1段语音声道。
+	 *	@param [in] utt_type1 指定第1段语音场景类型。
+	 *	@param [in] utt2  第2段语音路径。
+	 *	@oaram [in] sp_chan2 指定第2段语音声道。
+	 *	@param [in] utt_type2 指定第2段语音场景类型。
+	 *
+	 *	@return Rpc_ScoreInfo 验证得分信息
+	 */	
+    Rpc_ScoreInfo kvpTempVerifySpeakerByFile(1:string utt1, 2:i32 sp_chan1, 3:i32 utt_type1, 4:string utt2, 5:i32 sp_chan2, 6:i32 utt_type2),
+
+	/**
+	 *	说话人辨认。
+	 *
+	 *	@param [in] utt 语音文件路径。
+	 *	@param [in] node_list 库节点列表。
+	 *  @param [in] node_num 库节点数目。
+	 *	@param [in] top_n Top n数目。
+	 *	@param [in] utt_type 语音场景类型。
+	 *	@param [in] sp_chan 指定处理声道，0：左声道，1：右声道。
+	 *
+	 *	@return Rpc_TopSpeakerInfo Top n得分信息
+	 */
+    Rpc_TopSpeakerInfo kvpIdentifyTopSpeakerByFile(1:string utt, 2:list<string> vp_node_arr, 3:i32 node_num, 4:i32 top_n, 5:i32 utt_type, 6:i32 sp_chan),
+
+	/**
+	 *	将说话人模型以文件的形式加载到内存某库节点中。
+	 *	
+	 *	@param [in] vp_node 库节点名称。
+	 *	@param [in] iv_file 说话人模型文件路径。
+	 *
+	 *	@return KVP_CODE 
+	 *
+	 */
+    i32 kvpIvectorLoadByFile(1:string vp_node, 2:string iv_file),
+
+	/**
+	 *	向总库中插入某个库节点。
+	 *
+	 *	@param vp_node 库节点名称。
+	 *
+	 *	@return KVP_CODE
+	 */
+    i32 kvpInsertNode(1:string vp_node),
+
+	/**
+	 *	从总库中删除某个库节点。
+	 *
+	 *	@param vp_node 库节点名称。
+	 *
+	 *	@return KVP_CODE
+	 */
+    i32 kvpDeleteNode(1:string vp_node),
+			
+	/**
+	 *	获取机器指纹。
+	 *
+	 * @return 机器人指纹字符串。
+	 */
+	string kvpGetFingerprint(),
+	
+	/**
+	 *	获取授权信息。
+	 *
+	 * @return Rpc_LicenceInfo 授权信息。
+	 */
+	Rpc_LicenceInfo KvpGetLicenceInfo(),
+	
+	/**
+	 *	如果已经初始化成功，则直接返回KVP_CODE_SUCCEED，否则进行初始化。
+	 *
+	 *  @param licence 授权字符串。
+	 *  
+	 *  @return KVP_CODE
+	 */
+	i32 kvpSetLicence(1:string licence),
+	
+	/**
+	 *	判断Licence是否有效。
+	 *
+	 * 	@return 授权标志。
+	 */
+	bool kvpIsLicenceValid(),
+
+	/**
+	 *	注册说话人（二进制流格式）。
+	 *
+	 *	@param [in] utt 语音流。
+	 *	@param [in] vp_node 说话人待注册库节点名称。
+	 *	@param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
+	 *	@param [in] spk_id 说话人ID。
+	 *
+	 *	@return Rpc_ModelInfo 说话人模型信息。
+	 */
+    Rpc_ModelInfo kvpRegisterSpeakerByStream(1:list<i16> utt, 2:string vp_node, 3:string vp_dir, 4:string spk_id),
+
+	/**
+	 *	说话人辨认（二进制流格式）。
+	 *
+	 *	@param [in] utt 语音流。
+	 *	@param [in] node_list 库节点列表。
+	 *  @param [in] node_num 库节点数目。
+	 *	@param [in] top_n Top n数目。
+	 *	@param [in] utt_type 语音场景类型。
+	 *
+	 *	@return Rpc_TopSpeakerInfo Top n得分信息
+	 */
+    Rpc_TopSpeakerInfo kvpIdentifyTopSpeakerByStream(1:list<i16> utt, 2:list<string> vp_node_arr, 3:i32 node_num, 4:i32 top_n, 5:i32 utt_type),
+}
