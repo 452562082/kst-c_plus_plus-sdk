@@ -24,48 +24,43 @@ typedef unsigned char byte;
 #define DLL_EXPORTS __declspec(dllimport)
 #endif
 
-extern "C" DLL_EXPORTS void* CreateTransport(const char* ip,int port)
-{
-	boost::shared_ptr<TSocket> socket(new TSocket(ip, port));
-    boost::shared_ptr<TTransport> *transport = new boost::shared_ptr<TTransport>(new TFramedTransport(socket));
-	return static_cast<void*>(transport);
-}
+void* transport_ptr = nullptr;
+kvpServiceClient* client = nullptr;
 
-extern "C" DLL_EXPORTS void* CreateKvpServiceClient(void* transport_ptr)
-{	
-    boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(*static_cast<boost::shared_ptr<TTransport>*>(transport_ptr)));
-	kvpServiceClient* client = new kvpServiceClient(protocol);	
-	return static_cast<void*>(client);
-}
-
-extern "C" DLL_EXPORTS void DeleteKvpServiceClient(void* client_ptr)
-{
-	delete static_cast<kvpServiceClient*>(client_ptr);
-	client_ptr = nullptr;
-}
-
-extern "C" DLL_EXPORTS void TransportOpen(void* transport_ptr)
+void TransportOpen(void* transport_ptr)
 {
 	boost::shared_ptr<TTransport> *transport = static_cast<boost::shared_ptr<TTransport>*>(transport_ptr); 
 	(*transport)->open();
 }
 
-extern "C" DLL_EXPORTS void TransportClose(void* transport_ptr)
+void TransportClose(void* transport_ptr)
 {
 	boost::shared_ptr<TTransport> *transport = static_cast<boost::shared_ptr<TTransport>*>(transport_ptr); 
 	(*transport)->close();
 }
 
-extern "C" DLL_EXPORTS void DeleteTransport(void* transport_ptr)
+extern "C" DLL_EXPORTS void KvpServiceClient_Open(const char* ip, int port)
 {
-	delete static_cast<boost::shared_ptr<TTransport>*>(transport_ptr);
-	transport_ptr = nullptr;
+	boost::shared_ptr<TSocket> socket(new TSocket(ip, port));
+	boost::shared_ptr<TTransport> *transport = new boost::shared_ptr<TTransport>(new TFramedTransport(socket));
+	transport_ptr = static_cast<void*>(transport);
+	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(*transport));
+	client = new kvpServiceClient(protocol);
+	TransportOpen(transport_ptr);
 }
 
-extern "C" DLL_EXPORTS int32_t KvpInsertNode(void* client_ptr, const char* node_name)
+extern "C" DLL_EXPORTS void KvpServiceClient_close()
+{
+	TransportClose(transport_ptr);
+	delete static_cast<boost::shared_ptr<TTransport>*>(transport_ptr);
+	transport_ptr = nullptr;
+	delete client;
+	client = nullptr;
+}
+
+extern "C" DLL_EXPORTS int32_t KvpInsertNode(const char* node_name)
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr){
 			return -1;
 		}
@@ -75,10 +70,9 @@ extern "C" DLL_EXPORTS int32_t KvpInsertNode(void* client_ptr, const char* node_
 	}
 }
 
-extern "C" DLL_EXPORTS int32_t KvpDeleteNode(void* client_ptr, const char* node_name)
+extern "C" DLL_EXPORTS int32_t KvpDeleteNode(const char* node_name)
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr){
 			return -1;
 		}
@@ -88,14 +82,14 @@ extern "C" DLL_EXPORTS int32_t KvpDeleteNode(void* client_ptr, const char* node_
 	}
 }
 
-extern "C" DLL_EXPORTS void KvpRegisterSpeakerByStream(void* client_ptr, _Rpc_ModelInfo* ret, int16_t* utt, int utt_size, const char* vp_node, const char* vp_dir, const char* spk_id)
+extern "C" DLL_EXPORTS _Rpc_ModelInfo* KvpRegisterSpeakerByStream(int16_t* utt, int utt_size, const char* vp_node, const char* vp_dir, const char* spk_id)
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr){
-			return;
+			return nullptr;
 		}
 
+		_Rpc_ModelInfo *ret = new _Rpc_ModelInfo;
 		std::vector<short> utt_vec;
 		for (int i=0; i<utt_size; i++) {
 			utt_vec.push_back(utt[i]);
@@ -139,21 +133,27 @@ extern "C" DLL_EXPORTS void KvpRegisterSpeakerByStream(void* client_ptr, _Rpc_Mo
 			strcpy(ret->ErrMsg, _mdlinfo.ErrMsg.c_str());
 		}
 		ret->RetCode = _mdlinfo.ErrCode;
-
-		return;
+		return ret;
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
+		return nullptr;
 	}
 }
 
-extern "C" DLL_EXPORTS void KvpIdentifyTopSpeakerByStream(void* client_ptr, _Rpc_TopSpeakerInfo* ret, int16_t* utt, int utt_size, const char** vp_node_arr, int vp_node_arr_size, int node_num, int top_n, int utt_type)
+extern "C" DLL_EXPORTS void Delete_Rpc_ModelInfo(_Rpc_ModelInfo *ptr)
+{
+	delete ptr;
+	ptr = nullptr;
+}
+
+extern "C" DLL_EXPORTS _Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(int16_t* utt, int utt_size, const char** vp_node_arr, int vp_node_arr_size, int node_num, int top_n, int utt_type)
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr) {
-			return;
+			return nullptr;
 		}
 
+		_Rpc_TopSpeakerInfo *ret = new _Rpc_TopSpeakerInfo;
 		std::vector<std::string> vp_node_arr_vec;
 		for (int i=0; i<vp_node_arr_size; i++) {
 			vp_node_arr_vec.push_back(vp_node_arr[i]);
@@ -172,17 +172,19 @@ extern "C" DLL_EXPORTS void KvpIdentifyTopSpeakerByStream(void* client_ptr, _Rpc
 			strcpy(ret->Utt,_tsinfo.Utt.c_str());
 		}
 		if(_tsinfo.Scores.size() > 0){
-			ret->Scores = new _Rpc_SpeakerScore[_tsinfo.Scores.size()];
+			ret->Scores = new _Rpc_SpeakerScore*[_tsinfo.Scores.size()];
 			for(int i = 0;i < _tsinfo.Scores.size();++i)
 			{
+				_Rpc_SpeakerScore *score = new _Rpc_SpeakerScore;
 				if(_tsinfo.Scores[i].Spkid.length() > 0){
-					ret->Scores[i].Spkid = new char[_tsinfo.Scores[i].Spkid.length() + 1];
-					strcpy(ret->Scores[i].Spkid, _tsinfo.Scores[i].Spkid.c_str());
+					score->Spkid = new char[_tsinfo.Scores[i].Spkid.length() + 1];
+					strcpy(score->Spkid, _tsinfo.Scores[i].Spkid.c_str());
 				}
-				ret->Scores[i].Score = _tsinfo.Scores[i].Score;
-				ret->Scores[i].__isset = new _Rpc_SpeakerScore__isset;
-				ret->Scores[i].__isset->Score = _tsinfo.Scores[i].__isset.Score;
-				ret->Scores[i].__isset->Spkid = _tsinfo.Scores[i].__isset.Spkid;
+				score->Score = _tsinfo.Scores[i].Score;
+				score->__isset = new _Rpc_SpeakerScore__isset;
+				score->__isset->Score = _tsinfo.Scores[i].__isset.Score;
+				score->__isset->Spkid = _tsinfo.Scores[i].__isset.Spkid;
+				ret->Scores[i] = score;
 			}
 		}
 		ret->Scores_size = _tsinfo.Scores.size();
@@ -207,15 +209,22 @@ extern "C" DLL_EXPORTS void KvpIdentifyTopSpeakerByStream(void* client_ptr, _Rpc
 		ret->__isset->Top = _tsinfo.__isset.Top;
 		ret->__isset->Utt = _tsinfo.__isset.Utt;
 		ret->__isset->ValidDuration = _tsinfo.__isset.ValidDuration;
+		return ret;
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
+		return nullptr;
 	}
 }
 
-extern "C" DLL_EXPORTS int32_t KvpModelRemoveBySpkid(void* client_ptr, const char* vp_node, const char* vp_dir, const char* spk_id)
+extern "C" DLL_EXPORTS void Delete_Rpc_TopSpeakerInfo(_Rpc_TopSpeakerInfo *ptr)
+{
+	delete ptr;
+	ptr = nullptr;
+}
+
+extern "C" DLL_EXPORTS int32_t KvpModelRemoveBySpkid(const char* vp_node, const char* vp_dir, const char* spk_id)
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr) {
 			return -1;
 		}
@@ -225,27 +234,24 @@ extern "C" DLL_EXPORTS int32_t KvpModelRemoveBySpkid(void* client_ptr, const cha
 	}
 }
 
-extern "C" DLL_EXPORTS void KvpGetFingerprint(void* client_ptr, char* fingerprint)
+extern "C" DLL_EXPORTS const char* KvpGetFingerprint()
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr) {
-			return;
+			return nullptr;
 		}
 		std::string fingerprint_str;
 		client->kvpGetFingerprint(fingerprint_str);
-		fingerprint = new char[fingerprint_str.length()];
-		strcpy(fingerprint,fingerprint_str.c_str());
-		return;
+		return fingerprint_str.c_str();
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
+		return nullptr;
 	}
 }
 
-extern "C" DLL_EXPORTS bool KvpIsLicenceValid(void* client_ptr)
+extern "C" DLL_EXPORTS bool KvpIsLicenceValid()
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr) {
 			return false;
 		}
@@ -255,16 +261,16 @@ extern "C" DLL_EXPORTS bool KvpIsLicenceValid(void* client_ptr)
 	}
 }
 
-extern "C" DLL_EXPORTS void KvpGetLicenceInfo(void* client_ptr,_Rpc_LicenceInfo* ret)
+extern "C" DLL_EXPORTS _Rpc_LicenceInfo* KvpGetLicenceInfo()
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr) {
-			return;
+			return nullptr;
 		}
 		Rpc_LicenceInfo info;
 		client->KvpGetLicenceInfo(info);
 
+		_Rpc_LicenceInfo* ret = new _Rpc_LicenceInfo;
 		ret->dateStr = new char[info.dateStr.length()];
 		strcpy(ret->dateStr, info.dateStr.c_str());
 		ret->fingerprint = new char[info.fingerprint.length()];
@@ -276,16 +282,22 @@ extern "C" DLL_EXPORTS void KvpGetLicenceInfo(void* client_ptr,_Rpc_LicenceInfo*
 		ret->__isset->fingerprint = info.__isset.fingerprint;
 		ret->__isset->maxOccurs = info.__isset.maxOccurs;
 		ret->__isset->RetCode = info.__isset.RetCode;
-		return;
+		return ret;
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
+		return nullptr;
 	}
 }
 
-extern "C" DLL_EXPORTS int32_t KvpSetLicence(void *client_ptr, const char* licence)
+extern "C" DLL_EXPORTS void Delete_Rpc_LicenceInfo(_Rpc_LicenceInfo *ptr)
+{
+	delete ptr;
+	ptr = nullptr;
+}
+
+extern "C" DLL_EXPORTS int32_t KvpSetLicence(const char* licence)
 {
 	try{
-		kvpServiceClient* client = static_cast<kvpServiceClient*>(client_ptr);
 		if(client == nullptr) {
 			return -1;
 		}
