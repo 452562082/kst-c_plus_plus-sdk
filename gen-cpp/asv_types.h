@@ -480,6 +480,7 @@ inline std::ostream& operator<<(std::ostream& out, const Rpc_TopSpeakerInfo& obj
 
 typedef struct _Rpc_LicenceInfo__isset {
   _Rpc_LicenceInfo__isset() : dateStr(false), maxOccurs(false), fingerprint(false), RetCode(false) {}
+  ~_Rpc_LicenceInfo__isset(){}
   bool dateStr :1;
   bool maxOccurs :1;
   bool fingerprint :1;

@@ -51,11 +51,15 @@ extern "C" DLL_EXPORTS void KvpServiceClient_Open(const char* ip, int port)
 
 extern "C" DLL_EXPORTS void KvpServiceClient_close()
 {
-	TransportClose(transport_ptr);
-	delete static_cast<boost::shared_ptr<TTransport>*>(transport_ptr);
-	transport_ptr = nullptr;
-	delete client;
-	client = nullptr;
+	if(transport_ptr != nullptr){
+		TransportClose(transport_ptr);
+		delete static_cast<boost::shared_ptr<TTransport>*>(transport_ptr);
+		transport_ptr = nullptr;
+	}
+	if(client != nullptr){
+		delete client;
+		client = nullptr;
+	}
 }
 
 extern "C" DLL_EXPORTS int32_t KvpInsertNode(const char* node_name)
@@ -142,8 +146,10 @@ extern "C" DLL_EXPORTS _Rpc_ModelInfo* KvpRegisterSpeakerByStream(int16_t* utt, 
 
 extern "C" DLL_EXPORTS void Delete_Rpc_ModelInfo(_Rpc_ModelInfo *ptr)
 {
-	delete ptr;
-	ptr = nullptr;
+	if(ptr != nullptr){
+		delete ptr;
+		ptr = nullptr;
+	}
 }
 
 extern "C" DLL_EXPORTS _Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(int16_t* utt, int utt_size, const char** vp_node_arr, int vp_node_arr_size, int node_num, int top_n, int utt_type)
@@ -218,8 +224,10 @@ extern "C" DLL_EXPORTS _Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(int16_
 
 extern "C" DLL_EXPORTS void Delete_Rpc_TopSpeakerInfo(_Rpc_TopSpeakerInfo *ptr)
 {
-	delete ptr;
-	ptr = nullptr;
+	if(ptr != nullptr){
+		delete ptr;
+		ptr = nullptr;
+	}
 }
 
 extern "C" DLL_EXPORTS int32_t KvpModelRemoveBySpkid(const char* vp_node, const char* vp_dir, const char* spk_id)
@@ -271,9 +279,9 @@ extern "C" DLL_EXPORTS _Rpc_LicenceInfo* KvpGetLicenceInfo()
 		client->KvpGetLicenceInfo(info);
 
 		_Rpc_LicenceInfo* ret = new _Rpc_LicenceInfo;
-		ret->dateStr = new char[info.dateStr.length()];
+		ret->dateStr = new char[info.dateStr.length() + 1];
 		strcpy(ret->dateStr, info.dateStr.c_str());
-		ret->fingerprint = new char[info.fingerprint.length()];
+		ret->fingerprint = new char[info.fingerprint.length() + 1];
 		strcpy(ret->fingerprint,info.fingerprint.c_str());
 		ret->maxOccurs = info.maxOccurs;
 		ret->RetCode = info.RetCode;
@@ -291,8 +299,10 @@ extern "C" DLL_EXPORTS _Rpc_LicenceInfo* KvpGetLicenceInfo()
 
 extern "C" DLL_EXPORTS void Delete_Rpc_LicenceInfo(_Rpc_LicenceInfo *ptr)
 {
-	delete ptr;
-	ptr = nullptr;
+	if(ptr != nullptr){
+		delete ptr;
+		ptr = nullptr;
+	}
 }
 
 extern "C" DLL_EXPORTS int32_t KvpSetLicence(const char* licence)
