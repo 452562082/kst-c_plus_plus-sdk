@@ -10,7 +10,7 @@
 #include <thrift/TDispatchProcessor.h>
 #include <thrift/async/TConcurrentClientSyncInfo.h>
 #include "asv_types.h"
-#include "rpc_export.h"
+
 
 
 #ifdef _WIN32
@@ -166,6 +166,21 @@ class kvpServiceIf {
   virtual int32_t kvpDeleteNode(const std::string& vp_node) = 0;
 
   /**
+   * 将说话人模型从一个库移到另一个库。
+   * 
+   * @param spk_id 说话人ID。
+   * @param origin 原始库。
+   * @param target 目标库。
+   * 
+   * @return KVP_CODE
+   * 
+   * @param spk_id
+   * @param origin
+   * @param target
+   */
+  virtual int32_t kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target) = 0;
+
+  /**
    * 获取机器指纹。
    * 
    * @return 机器人指纹字符串。
@@ -200,7 +215,7 @@ class kvpServiceIf {
   /**
    * 注册说话人（二进制流格式）。
    * 
-   * @param [in] utt 语音流。
+   * @param [in] utt 语音路径。
    * @param [in] vp_node 说话人待注册库节点名称。
    * @param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
    * @param [in] spk_id 说话人ID。
@@ -232,6 +247,55 @@ class kvpServiceIf {
    * @param utt_type
    */
   virtual void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type) = 0;
+
+  /**
+   * 说话人确认（二进制流格式）。
+   * 
+   * @param [in] utt 语音流。
+   *  @param [in] spk_id 说话人ID。
+   * @param [in] vp_node 库节点。
+   * @param [in] utt_type 语音场景类型。
+   * 
+   * @return Rpc_ScoreInfo 得分信息
+   * 
+   * @param utt
+   * @param spk_id
+   * @param vp_node
+   * @param utt_type
+   */
+  virtual void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type) = 0;
+
+  /**
+   * 1:1验证(给定2段语音进行比较，二进制流格式)。
+   * 
+   * @param [in] utt1 第1段语音流。
+   * @oaram [in] sp_chan1 指定第1段语音声道。
+   * @param [in] utt_type1 指定第1段语音场景类型。
+   * @param [in] utt2  第2段语音流。
+   * @oaram [in] sp_chan2 指定第2段语音声道。
+   * @param [in] utt_type2 指定第2段语音场景类型。
+   * 
+   * @return Rpc_ScoreInfo 验证得分信息
+   * 
+   * @param utt1
+   * @param sp_chan1
+   * @param utt_type1
+   * @param utt2
+   * @param sp_chan2
+   * @param utt_type2
+   */
+  virtual void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2) = 0;
+
+  /**
+   * 获取某节点说话人ID列表。
+   * 
+   * @param [in] vp_node 节点名称。
+   * 
+   * @return 说话人ID列表
+   * 
+   * @param vp_node
+   */
+  virtual void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node) = 0;
 };
 
 class kvpServiceIfFactory {
@@ -295,6 +359,10 @@ class kvpServiceNull : virtual public kvpServiceIf {
     int32_t _return = 0;
     return _return;
   }
+  int32_t kvpMoveNode(const std::string& /* spk_id */, const std::string& /* origin */, const std::string& /* target */) {
+    int32_t _return = 0;
+    return _return;
+  }
   void kvpGetFingerprint(std::string& /* _return */) {
     return;
   }
@@ -313,6 +381,15 @@ class kvpServiceNull : virtual public kvpServiceIf {
     return;
   }
   void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& /* _return */, const std::vector<int16_t> & /* utt */, const std::vector<std::string> & /* vp_node_arr */, const int32_t /* node_num */, const int32_t /* top_n */, const int32_t /* utt_type */) {
+    return;
+  }
+  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& /* _return */, const std::vector<int16_t> & /* utt */, const std::string& /* spk_id */, const std::string& /* vp_node */, const int32_t /* utt_type */) {
+    return;
+  }
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& /* _return */, const std::vector<int16_t> & /* utt1 */, const int32_t /* sp_chan1 */, const int32_t /* utt_type1 */, const std::vector<int16_t> & /* utt2 */, const int32_t /* sp_chan2 */, const int32_t /* utt_type2 */) {
+    return;
+  }
+  void kvpNodeGetList(std::vector<std::string> & /* _return */, const std::string& /* vp_node */) {
     return;
   }
 };
@@ -1492,6 +1569,124 @@ class kvpService_kvpDeleteNode_presult {
 
 };
 
+typedef struct _kvpService_kvpMoveNode_args__isset {
+  _kvpService_kvpMoveNode_args__isset() : spk_id(false), origin(false), target(false) {}
+  bool spk_id :1;
+  bool origin :1;
+  bool target :1;
+} _kvpService_kvpMoveNode_args__isset;
+
+class kvpService_kvpMoveNode_args {
+ public:
+
+  kvpService_kvpMoveNode_args(const kvpService_kvpMoveNode_args&);
+  kvpService_kvpMoveNode_args& operator=(const kvpService_kvpMoveNode_args&);
+  kvpService_kvpMoveNode_args() : spk_id(), origin(), target() {
+  }
+
+  virtual ~kvpService_kvpMoveNode_args() throw();
+  std::string spk_id;
+  std::string origin;
+  std::string target;
+
+  _kvpService_kvpMoveNode_args__isset __isset;
+
+  void __set_spk_id(const std::string& val);
+
+  void __set_origin(const std::string& val);
+
+  void __set_target(const std::string& val);
+
+  bool operator == (const kvpService_kvpMoveNode_args & rhs) const
+  {
+    if (!(spk_id == rhs.spk_id))
+      return false;
+    if (!(origin == rhs.origin))
+      return false;
+    if (!(target == rhs.target))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpMoveNode_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpMoveNode_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class kvpService_kvpMoveNode_pargs {
+ public:
+
+
+  virtual ~kvpService_kvpMoveNode_pargs() throw();
+  const std::string* spk_id;
+  const std::string* origin;
+  const std::string* target;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpMoveNode_result__isset {
+  _kvpService_kvpMoveNode_result__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpMoveNode_result__isset;
+
+class kvpService_kvpMoveNode_result {
+ public:
+
+  kvpService_kvpMoveNode_result(const kvpService_kvpMoveNode_result&);
+  kvpService_kvpMoveNode_result& operator=(const kvpService_kvpMoveNode_result&);
+  kvpService_kvpMoveNode_result() : success(0) {
+  }
+
+  virtual ~kvpService_kvpMoveNode_result() throw();
+  int32_t success;
+
+  _kvpService_kvpMoveNode_result__isset __isset;
+
+  void __set_success(const int32_t val);
+
+  bool operator == (const kvpService_kvpMoveNode_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpMoveNode_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpMoveNode_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpMoveNode_presult__isset {
+  _kvpService_kvpMoveNode_presult__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpMoveNode_presult__isset;
+
+class kvpService_kvpMoveNode_presult {
+ public:
+
+
+  virtual ~kvpService_kvpMoveNode_presult() throw();
+  int32_t* success;
+
+  _kvpService_kvpMoveNode_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 
 class kvpService_kvpGetFingerprint_args {
  public:
@@ -2129,6 +2324,374 @@ class kvpService_kvpIdentifyTopSpeakerByStream_presult {
 
 };
 
+typedef struct _kvpService_kvpVerifySpeakerByStream_args__isset {
+  _kvpService_kvpVerifySpeakerByStream_args__isset() : utt(false), spk_id(false), vp_node(false), utt_type(false) {}
+  bool utt :1;
+  bool spk_id :1;
+  bool vp_node :1;
+  bool utt_type :1;
+} _kvpService_kvpVerifySpeakerByStream_args__isset;
+
+class kvpService_kvpVerifySpeakerByStream_args {
+ public:
+
+  kvpService_kvpVerifySpeakerByStream_args(const kvpService_kvpVerifySpeakerByStream_args&);
+  kvpService_kvpVerifySpeakerByStream_args& operator=(const kvpService_kvpVerifySpeakerByStream_args&);
+  kvpService_kvpVerifySpeakerByStream_args() : spk_id(), vp_node(), utt_type(0) {
+  }
+
+  virtual ~kvpService_kvpVerifySpeakerByStream_args() throw();
+  std::vector<int16_t>  utt;
+  std::string spk_id;
+  std::string vp_node;
+  int32_t utt_type;
+
+  _kvpService_kvpVerifySpeakerByStream_args__isset __isset;
+
+  void __set_utt(const std::vector<int16_t> & val);
+
+  void __set_spk_id(const std::string& val);
+
+  void __set_vp_node(const std::string& val);
+
+  void __set_utt_type(const int32_t val);
+
+  bool operator == (const kvpService_kvpVerifySpeakerByStream_args & rhs) const
+  {
+    if (!(utt == rhs.utt))
+      return false;
+    if (!(spk_id == rhs.spk_id))
+      return false;
+    if (!(vp_node == rhs.vp_node))
+      return false;
+    if (!(utt_type == rhs.utt_type))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpVerifySpeakerByStream_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpVerifySpeakerByStream_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class kvpService_kvpVerifySpeakerByStream_pargs {
+ public:
+
+
+  virtual ~kvpService_kvpVerifySpeakerByStream_pargs() throw();
+  const std::vector<int16_t> * utt;
+  const std::string* spk_id;
+  const std::string* vp_node;
+  const int32_t* utt_type;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpVerifySpeakerByStream_result__isset {
+  _kvpService_kvpVerifySpeakerByStream_result__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpVerifySpeakerByStream_result__isset;
+
+class kvpService_kvpVerifySpeakerByStream_result {
+ public:
+
+  kvpService_kvpVerifySpeakerByStream_result(const kvpService_kvpVerifySpeakerByStream_result&);
+  kvpService_kvpVerifySpeakerByStream_result& operator=(const kvpService_kvpVerifySpeakerByStream_result&);
+  kvpService_kvpVerifySpeakerByStream_result() {
+  }
+
+  virtual ~kvpService_kvpVerifySpeakerByStream_result() throw();
+  Rpc_ScoreInfo success;
+
+  _kvpService_kvpVerifySpeakerByStream_result__isset __isset;
+
+  void __set_success(const Rpc_ScoreInfo& val);
+
+  bool operator == (const kvpService_kvpVerifySpeakerByStream_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpVerifySpeakerByStream_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpVerifySpeakerByStream_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpVerifySpeakerByStream_presult__isset {
+  _kvpService_kvpVerifySpeakerByStream_presult__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpVerifySpeakerByStream_presult__isset;
+
+class kvpService_kvpVerifySpeakerByStream_presult {
+ public:
+
+
+  virtual ~kvpService_kvpVerifySpeakerByStream_presult() throw();
+  Rpc_ScoreInfo* success;
+
+  _kvpService_kvpVerifySpeakerByStream_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _kvpService_kvpTempVerifySpeakerByStream_args__isset {
+  _kvpService_kvpTempVerifySpeakerByStream_args__isset() : utt1(false), sp_chan1(false), utt_type1(false), utt2(false), sp_chan2(false), utt_type2(false) {}
+  bool utt1 :1;
+  bool sp_chan1 :1;
+  bool utt_type1 :1;
+  bool utt2 :1;
+  bool sp_chan2 :1;
+  bool utt_type2 :1;
+} _kvpService_kvpTempVerifySpeakerByStream_args__isset;
+
+class kvpService_kvpTempVerifySpeakerByStream_args {
+ public:
+
+  kvpService_kvpTempVerifySpeakerByStream_args(const kvpService_kvpTempVerifySpeakerByStream_args&);
+  kvpService_kvpTempVerifySpeakerByStream_args& operator=(const kvpService_kvpTempVerifySpeakerByStream_args&);
+  kvpService_kvpTempVerifySpeakerByStream_args() : sp_chan1(0), utt_type1(0), sp_chan2(0), utt_type2(0) {
+  }
+
+  virtual ~kvpService_kvpTempVerifySpeakerByStream_args() throw();
+  std::vector<int16_t>  utt1;
+  int32_t sp_chan1;
+  int32_t utt_type1;
+  std::vector<int16_t>  utt2;
+  int32_t sp_chan2;
+  int32_t utt_type2;
+
+  _kvpService_kvpTempVerifySpeakerByStream_args__isset __isset;
+
+  void __set_utt1(const std::vector<int16_t> & val);
+
+  void __set_sp_chan1(const int32_t val);
+
+  void __set_utt_type1(const int32_t val);
+
+  void __set_utt2(const std::vector<int16_t> & val);
+
+  void __set_sp_chan2(const int32_t val);
+
+  void __set_utt_type2(const int32_t val);
+
+  bool operator == (const kvpService_kvpTempVerifySpeakerByStream_args & rhs) const
+  {
+    if (!(utt1 == rhs.utt1))
+      return false;
+    if (!(sp_chan1 == rhs.sp_chan1))
+      return false;
+    if (!(utt_type1 == rhs.utt_type1))
+      return false;
+    if (!(utt2 == rhs.utt2))
+      return false;
+    if (!(sp_chan2 == rhs.sp_chan2))
+      return false;
+    if (!(utt_type2 == rhs.utt_type2))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpTempVerifySpeakerByStream_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpTempVerifySpeakerByStream_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class kvpService_kvpTempVerifySpeakerByStream_pargs {
+ public:
+
+
+  virtual ~kvpService_kvpTempVerifySpeakerByStream_pargs() throw();
+  const std::vector<int16_t> * utt1;
+  const int32_t* sp_chan1;
+  const int32_t* utt_type1;
+  const std::vector<int16_t> * utt2;
+  const int32_t* sp_chan2;
+  const int32_t* utt_type2;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpTempVerifySpeakerByStream_result__isset {
+  _kvpService_kvpTempVerifySpeakerByStream_result__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpTempVerifySpeakerByStream_result__isset;
+
+class kvpService_kvpTempVerifySpeakerByStream_result {
+ public:
+
+  kvpService_kvpTempVerifySpeakerByStream_result(const kvpService_kvpTempVerifySpeakerByStream_result&);
+  kvpService_kvpTempVerifySpeakerByStream_result& operator=(const kvpService_kvpTempVerifySpeakerByStream_result&);
+  kvpService_kvpTempVerifySpeakerByStream_result() {
+  }
+
+  virtual ~kvpService_kvpTempVerifySpeakerByStream_result() throw();
+  Rpc_ScoreInfo success;
+
+  _kvpService_kvpTempVerifySpeakerByStream_result__isset __isset;
+
+  void __set_success(const Rpc_ScoreInfo& val);
+
+  bool operator == (const kvpService_kvpTempVerifySpeakerByStream_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpTempVerifySpeakerByStream_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpTempVerifySpeakerByStream_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpTempVerifySpeakerByStream_presult__isset {
+  _kvpService_kvpTempVerifySpeakerByStream_presult__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpTempVerifySpeakerByStream_presult__isset;
+
+class kvpService_kvpTempVerifySpeakerByStream_presult {
+ public:
+
+
+  virtual ~kvpService_kvpTempVerifySpeakerByStream_presult() throw();
+  Rpc_ScoreInfo* success;
+
+  _kvpService_kvpTempVerifySpeakerByStream_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _kvpService_kvpNodeGetList_args__isset {
+  _kvpService_kvpNodeGetList_args__isset() : vp_node(false) {}
+  bool vp_node :1;
+} _kvpService_kvpNodeGetList_args__isset;
+
+class kvpService_kvpNodeGetList_args {
+ public:
+
+  kvpService_kvpNodeGetList_args(const kvpService_kvpNodeGetList_args&);
+  kvpService_kvpNodeGetList_args& operator=(const kvpService_kvpNodeGetList_args&);
+  kvpService_kvpNodeGetList_args() : vp_node() {
+  }
+
+  virtual ~kvpService_kvpNodeGetList_args() throw();
+  std::string vp_node;
+
+  _kvpService_kvpNodeGetList_args__isset __isset;
+
+  void __set_vp_node(const std::string& val);
+
+  bool operator == (const kvpService_kvpNodeGetList_args & rhs) const
+  {
+    if (!(vp_node == rhs.vp_node))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpNodeGetList_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpNodeGetList_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class kvpService_kvpNodeGetList_pargs {
+ public:
+
+
+  virtual ~kvpService_kvpNodeGetList_pargs() throw();
+  const std::string* vp_node;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpNodeGetList_result__isset {
+  _kvpService_kvpNodeGetList_result__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpNodeGetList_result__isset;
+
+class kvpService_kvpNodeGetList_result {
+ public:
+
+  kvpService_kvpNodeGetList_result(const kvpService_kvpNodeGetList_result&);
+  kvpService_kvpNodeGetList_result& operator=(const kvpService_kvpNodeGetList_result&);
+  kvpService_kvpNodeGetList_result() {
+  }
+
+  virtual ~kvpService_kvpNodeGetList_result() throw();
+  std::vector<std::string>  success;
+
+  _kvpService_kvpNodeGetList_result__isset __isset;
+
+  void __set_success(const std::vector<std::string> & val);
+
+  bool operator == (const kvpService_kvpNodeGetList_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const kvpService_kvpNodeGetList_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const kvpService_kvpNodeGetList_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _kvpService_kvpNodeGetList_presult__isset {
+  _kvpService_kvpNodeGetList_presult__isset() : success(false) {}
+  bool success :1;
+} _kvpService_kvpNodeGetList_presult__isset;
+
+class kvpService_kvpNodeGetList_presult {
+ public:
+
+
+  virtual ~kvpService_kvpNodeGetList_presult() throw();
+  std::vector<std::string> * success;
+
+  _kvpService_kvpNodeGetList_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class kvpServiceClient : virtual public kvpServiceIf {
  public:
   kvpServiceClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -2184,6 +2747,9 @@ class kvpServiceClient : virtual public kvpServiceIf {
   int32_t kvpDeleteNode(const std::string& vp_node);
   void send_kvpDeleteNode(const std::string& vp_node);
   int32_t recv_kvpDeleteNode();
+  int32_t kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target);
+  void send_kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target);
+  int32_t recv_kvpMoveNode();
   void kvpGetFingerprint(std::string& _return);
   void send_kvpGetFingerprint();
   void recv_kvpGetFingerprint(std::string& _return);
@@ -2202,6 +2768,15 @@ class kvpServiceClient : virtual public kvpServiceIf {
   void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type);
   void send_kvpIdentifyTopSpeakerByStream(const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type);
   void recv_kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return);
+  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
+  void send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
+  void recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return);
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
+  void send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
+  void recv_kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return);
+  void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node);
+  void send_kvpNodeGetList(const std::string& vp_node);
+  void recv_kvpNodeGetList(std::vector<std::string> & _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -2227,12 +2802,16 @@ class kvpServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_kvpIvectorLoadByFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpInsertNode(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpDeleteNode(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_kvpMoveNode(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpGetFingerprint(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_KvpGetLicenceInfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpSetLicence(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpIsLicenceValid(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpRegisterSpeakerByStream(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_kvpIdentifyTopSpeakerByStream(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_kvpVerifySpeakerByStream(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_kvpTempVerifySpeakerByStream(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_kvpNodeGetList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   kvpServiceProcessor(boost::shared_ptr<kvpServiceIf> iface) :
     iface_(iface) {
@@ -2246,12 +2825,16 @@ class kvpServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["kvpIvectorLoadByFile"] = &kvpServiceProcessor::process_kvpIvectorLoadByFile;
     processMap_["kvpInsertNode"] = &kvpServiceProcessor::process_kvpInsertNode;
     processMap_["kvpDeleteNode"] = &kvpServiceProcessor::process_kvpDeleteNode;
+    processMap_["kvpMoveNode"] = &kvpServiceProcessor::process_kvpMoveNode;
     processMap_["kvpGetFingerprint"] = &kvpServiceProcessor::process_kvpGetFingerprint;
     processMap_["KvpGetLicenceInfo"] = &kvpServiceProcessor::process_KvpGetLicenceInfo;
     processMap_["kvpSetLicence"] = &kvpServiceProcessor::process_kvpSetLicence;
     processMap_["kvpIsLicenceValid"] = &kvpServiceProcessor::process_kvpIsLicenceValid;
     processMap_["kvpRegisterSpeakerByStream"] = &kvpServiceProcessor::process_kvpRegisterSpeakerByStream;
     processMap_["kvpIdentifyTopSpeakerByStream"] = &kvpServiceProcessor::process_kvpIdentifyTopSpeakerByStream;
+    processMap_["kvpVerifySpeakerByStream"] = &kvpServiceProcessor::process_kvpVerifySpeakerByStream;
+    processMap_["kvpTempVerifySpeakerByStream"] = &kvpServiceProcessor::process_kvpTempVerifySpeakerByStream;
+    processMap_["kvpNodeGetList"] = &kvpServiceProcessor::process_kvpNodeGetList;
   }
 
   virtual ~kvpServiceProcessor() {}
@@ -2376,6 +2959,15 @@ class kvpServiceMultiface : virtual public kvpServiceIf {
     return ifaces_[i]->kvpDeleteNode(vp_node);
   }
 
+  int32_t kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->kvpMoveNode(spk_id, origin, target);
+    }
+    return ifaces_[i]->kvpMoveNode(spk_id, origin, target);
+  }
+
   void kvpGetFingerprint(std::string& _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2431,6 +3023,36 @@ class kvpServiceMultiface : virtual public kvpServiceIf {
       ifaces_[i]->kvpIdentifyTopSpeakerByStream(_return, utt, vp_node_arr, node_num, top_n, utt_type);
     }
     ifaces_[i]->kvpIdentifyTopSpeakerByStream(_return, utt, vp_node_arr, node_num, top_n, utt_type);
+    return;
+  }
+
+  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->kvpVerifySpeakerByStream(_return, utt, spk_id, vp_node, utt_type);
+    }
+    ifaces_[i]->kvpVerifySpeakerByStream(_return, utt, spk_id, vp_node, utt_type);
+    return;
+  }
+
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->kvpTempVerifySpeakerByStream(_return, utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+    }
+    ifaces_[i]->kvpTempVerifySpeakerByStream(_return, utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+    return;
+  }
+
+  void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->kvpNodeGetList(_return, vp_node);
+    }
+    ifaces_[i]->kvpNodeGetList(_return, vp_node);
     return;
   }
 
@@ -2494,6 +3116,9 @@ class kvpServiceConcurrentClient : virtual public kvpServiceIf {
   int32_t kvpDeleteNode(const std::string& vp_node);
   int32_t send_kvpDeleteNode(const std::string& vp_node);
   int32_t recv_kvpDeleteNode(const int32_t seqid);
+  int32_t kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target);
+  int32_t send_kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target);
+  int32_t recv_kvpMoveNode(const int32_t seqid);
   void kvpGetFingerprint(std::string& _return);
   int32_t send_kvpGetFingerprint();
   void recv_kvpGetFingerprint(std::string& _return, const int32_t seqid);
@@ -2512,6 +3137,15 @@ class kvpServiceConcurrentClient : virtual public kvpServiceIf {
   void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type);
   int32_t send_kvpIdentifyTopSpeakerByStream(const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type);
   void recv_kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const int32_t seqid);
+  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
+  int32_t send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
+  void recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const int32_t seqid);
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
+  int32_t send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
+  void recv_kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const int32_t seqid);
+  void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node);
+  int32_t send_kvpNodeGetList(const std::string& vp_node);
+  void recv_kvpNodeGetList(std::vector<std::string> & _return, const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

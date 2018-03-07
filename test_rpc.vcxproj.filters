@@ -1,27 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="test_rpc.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="gen-cpp\asv_constants.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="asv_rpc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="gen-cpp\asv_types.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="asv_types_pack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="gen-cpp\kvpService.cpp">
@@ -32,7 +21,13 @@
     <ClInclude Include="gen-cpp\asv_constants.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="asv_rpc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="gen-cpp\asv_types.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="asv_types_pack.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="gen-cpp\kvpService.h">
@@ -41,5 +36,16 @@
     <ClInclude Include="test_rpc.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{25add660-9651-448a-8f98-e475d61224b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{afbce038-7727-4799-8fc3-391f62ce5c1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{06a73abb-5bd6-47a1-8c7d-152af0070e8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

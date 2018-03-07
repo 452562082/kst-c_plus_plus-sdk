@@ -1,12 +1,12 @@
 // test_rpc.cpp : 定义控制台应用程序的入口点。
 //
 
-#include "gen-cpp/kvpService.h"
+/*#include "gen-cpp/kvpService.h"
 #include "thrift/transport/TSocket.h"
 #include "thrift/transport/TBufferTransports.h"
 #include "thrift/protocol/TBinaryProtocol.h"
 #include <iostream>
-#include "test_rpc.h"
+#include "asv_types_pack.h"
 
 using namespace apache::thrift;
 using namespace apache::thrift::protocol;
@@ -17,12 +17,12 @@ using namespace std;
 
 typedef unsigned char byte;
 
-#define DLL_EXPORTS
-#ifdef DLL_EXPORTS
-#define DLL_EXPORTS __declspec(dllexport)
-#else
-#define DLL_EXPORTS __declspec(dllimport)
-#endif
+//#define DLL_EXPORTS
+//#ifdef DLL_EXPORTS
+//#define DLL_EXPORTS __declspec(dllexport)
+//#else
+//#define DLL_EXPORTS __declspec(dllimport)
+//#endif
 
 void* transport_ptr = nullptr;
 kvpServiceClient* client = nullptr;
@@ -62,181 +62,125 @@ extern "C" DLL_EXPORTS void KvpServiceClient_close()
 	}
 }
 
-extern "C" DLL_EXPORTS int32_t KvpInsertNode(const char* node_name)
-{
-	try{
-		if(client == nullptr){
-			return -1;
-		}
-		return client->kvpInsertNode(node_name);
-	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
-	}
-}
-
-extern "C" DLL_EXPORTS int32_t KvpDeleteNode(const char* node_name)
-{
-	try{
-		if(client == nullptr){
-			return -1;
-		}
-		return client->kvpDeleteNode(node_name);
-	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
-	}
-}
-
-extern "C" DLL_EXPORTS _Rpc_ModelInfo* KvpRegisterSpeakerByStream(int16_t* utt, int utt_size, const char* vp_node, const char* vp_dir, const char* spk_id)
+extern "C" DLL_EXPORTS _Rpc_UttInfo* KvpGetUttInfo(const char* wav_path)
 {
 	try{
 		if(client == nullptr){
 			return nullptr;
 		}
 
-		_Rpc_ModelInfo *ret = new _Rpc_ModelInfo;
-		std::vector<short> utt_vec;
-		for (int i=0; i<utt_size; i++) {
-			utt_vec.push_back(utt[i]);
-		}
-
-		Rpc_ModelInfo _mdlinfo;
-		client->kvpRegisterSpeakerByStream(_mdlinfo, utt_vec, vp_node, vp_dir, spk_id);
-
-		if(_mdlinfo.Utt.length() > 0){
-			ret->Utt = new char[_mdlinfo.Utt.length() + 1];
-			strcpy(ret->Utt,_mdlinfo.Utt.c_str());
-		}
-		if(_mdlinfo.Spkid.length() > 0){
-			ret->Spkid = new char[_mdlinfo.Spkid.length() + 1];
-			strcpy(ret->Spkid,_mdlinfo.Spkid.c_str());
-		}
-		ret->Size = _mdlinfo.Size;
-		if(_mdlinfo.Language.length() > 0){
-			ret->Language = new char[_mdlinfo.Language.length() + 1];
-			strcpy(ret->Language,_mdlinfo.Language.c_str());
-		}
-		if(_mdlinfo.Gender.length() > 0){
-			ret->Gender = new char[_mdlinfo.Gender.length() + 1];
-			strcpy(ret->Gender,_mdlinfo.Gender.c_str());
-		}
-		if(_mdlinfo.Channeltype.length() > 0){
-			ret->Channeltype = new char[_mdlinfo.Channeltype.length() + 1];
-			strcpy(ret->Channeltype,_mdlinfo.Channeltype.c_str());
-		}
-
-		ret->SampRate = _mdlinfo.SampRate;
-		ret->Duration = _mdlinfo.Duration;
-		ret->ValidDuration = _mdlinfo.ValidDuration;
-		if(_mdlinfo.IvFile.length() > 0){
-			ret->IvFile = new char[_mdlinfo.IvFile.length() + 1];
-			strcpy(ret->IvFile,_mdlinfo.IvFile.c_str());
-		}
-		ret->ErrCode = _mdlinfo.ErrCode;
-		if(_mdlinfo.ErrMsg.length() > 0){
-			ret->ErrMsg = new char[_mdlinfo.ErrMsg.length() + 1];
-			strcpy(ret->ErrMsg, _mdlinfo.ErrMsg.c_str());
-		}
-		ret->RetCode = _mdlinfo.ErrCode;
-		return ret;
+		Rpc_UttInfo info;
+		client->kvpGetUttInfo(info, wav_path);
+		return asv_types_pack::Rpc_UttInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
-		return nullptr;
-	}
-}
-
-extern "C" DLL_EXPORTS void Delete_Rpc_ModelInfo(_Rpc_ModelInfo *ptr)
-{
-	if(ptr != nullptr){
-		delete ptr;
-		ptr = nullptr;
-	}
-}
-
-extern "C" DLL_EXPORTS _Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(int16_t* utt, int utt_size, const char** vp_node_arr, int vp_node_arr_size, int node_num, int top_n, int utt_type)
-{
-	try{
-		if(client == nullptr) {
-			return nullptr;
-		}
-
-		_Rpc_TopSpeakerInfo *ret = new _Rpc_TopSpeakerInfo;
-		std::vector<std::string> vp_node_arr_vec;
-		for (int i=0; i<vp_node_arr_size; i++) {
-			vp_node_arr_vec.push_back(vp_node_arr[i]);
-		}
-
-		std::vector<short> utt_vec;
-		for (int i=0; i<utt_size; i++) {
-			utt_vec.push_back(utt[i]);
-		}
-
-		Rpc_TopSpeakerInfo _tsinfo;
-		client->kvpIdentifyTopSpeakerByStream(_tsinfo, utt_vec, vp_node_arr_vec, node_num, top_n, utt_type);
-
-		if(_tsinfo.Utt.length() > 0){
-			ret->Utt = new char[_tsinfo.Utt.length() + 1];
-			strcpy(ret->Utt,_tsinfo.Utt.c_str());
-		}
-		if(_tsinfo.Scores.size() > 0){
-			ret->Scores = new _Rpc_SpeakerScore*[_tsinfo.Scores.size()];
-			for(int i = 0;i < _tsinfo.Scores.size();++i)
-			{
-				_Rpc_SpeakerScore *score = new _Rpc_SpeakerScore;
-				if(_tsinfo.Scores[i].Spkid.length() > 0){
-					score->Spkid = new char[_tsinfo.Scores[i].Spkid.length() + 1];
-					strcpy(score->Spkid, _tsinfo.Scores[i].Spkid.c_str());
-				}
-				score->Score = _tsinfo.Scores[i].Score;
-				score->__isset = new _Rpc_SpeakerScore__isset;
-				score->__isset->Score = _tsinfo.Scores[i].__isset.Score;
-				score->__isset->Spkid = _tsinfo.Scores[i].__isset.Spkid;
-				ret->Scores[i] = score;
-			}
-		}
-		ret->Scores_size = _tsinfo.Scores.size();
-		ret->Top = _tsinfo.Top;
-		ret->SampRate = _tsinfo.SampRate;
-		ret->Duration = _tsinfo.Duration;
-		ret->ValidDuration = _tsinfo.ValidDuration;
-		ret->ErrCode = _tsinfo.ErrCode;
-		if(_tsinfo.ErrMsg.length() > 0){
-			ret->ErrMsg = new char[_tsinfo.ErrMsg.length() + 1];
-			strcpy(ret->ErrMsg, _tsinfo.ErrMsg.c_str());
-		}
-		ret->RetCode = _tsinfo.RetCode;
-
-		ret->__isset = new _Rpc_TopSpeakerInfo__isset;
-		ret->__isset->Duration = _tsinfo.__isset.Duration;
-		ret->__isset->ErrCode = _tsinfo.__isset.ErrCode;
-		ret->__isset->ErrMsg = _tsinfo.__isset.ErrMsg;
-		ret->__isset->RetCode = _tsinfo.__isset.RetCode;
-		ret->__isset->SampRate = _tsinfo.__isset.SampRate;
-		ret->__isset->Scores = _tsinfo.__isset.Scores;
-		ret->__isset->Top = _tsinfo.__isset.Top;
-		ret->__isset->Utt = _tsinfo.__isset.Utt;
-		ret->__isset->ValidDuration = _tsinfo.__isset.ValidDuration;
-		return ret;
-	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
-		return nullptr;
-	}
-}
-
-extern "C" DLL_EXPORTS void Delete_Rpc_TopSpeakerInfo(_Rpc_TopSpeakerInfo *ptr)
-{
-	if(ptr != nullptr){
-		delete ptr;
-		ptr = nullptr;
+		std::cout << "Error:" << ex.what() << std::endl;
 	}
 }
 
 extern "C" DLL_EXPORTS int32_t KvpModelRemoveBySpkid(const char* vp_node, const char* vp_dir, const char* spk_id)
 {
 	try{
-		if(client == nullptr) {
+		if(client == nullptr){
 			return -1;
 		}
 		return client->kvpModelRemoveBySpkid(vp_node,vp_dir,spk_id);
+	}catch(std::exception ex){
+		std:;cout << "Error:" << ex.what() << std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS _Rpc_ModelInfo* KvpRegisterSpeakerByFile(const char* utt, const char* vp_node, const char* vp_dir, const char* spk_id, int32_t sp_chan)
+{
+	try{
+		if(client == nullptr){
+			return nullptr;
+		}
+		Rpc_ModelInfo info;
+		client->kvpRegisterSpeakerByFile(info, utt, vp_node, vp_dir, spk_id, sp_chan);
+		return asv_types_pack::Rpc_ModelInfo__extract(info);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() << std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS _Rpc_ScoreInfo* KvpVerifySpeakerByFile(const char* utt, const char* spk_id, const char* vp_node, int32_t utt_type, int32_t sp_chan)
+{
+	try{
+		if(client == nullptr){
+			return nullptr;
+		}
+		Rpc_ScoreInfo info;
+		client->kvpVerifySpeakerByFile(info, utt, spk_id, vp_node, utt_type, sp_chan);
+		return asv_types_pack::Rpc_ScoreInfo__extract(info);
+	}catch(std::exception ex){
+		std:;cout << "Error:" << ex.what() << std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS _Rpc_ScoreInfo* KvpTempVerifySpeakerByFile(const char* utt1, int32_t sp_chan1, int32_t utt_type1, const char* utt2, int32_t sp_chan2, int32_t utt_type2)
+{
+	try{
+		if(client == nullptr){
+			return nullptr;
+		}
+		Rpc_ScoreInfo info;
+		client->kvpTempVerifySpeakerByFile(info, utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+		return asv_types_pack::Rpc_ScoreInfo__extract(info);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() << std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS _Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByFile(const char* utt, const char** vp_node_arr, int32_t node_num, int32_t top_n, int32_t utt_type, int32_t sp_chan)
+{
+	try{
+		if(client == nullptr){
+			return nullptr;
+		}
+		Rpc_TopSpeakerInfo info;
+		
+		std::vector<std::string> vec;
+		for(int i = 0;i < node_num;i++){
+			vec.push_back(vp_node_arr[i]);
+		}
+		client->kvpIdentifyTopSpeakerByFile(info, utt, vec, node_num, top_n, utt_type, sp_chan);
+		return asv_types_pack::Rpc_TopSpeakerInfo__extract(info);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() << std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS int32_t KvpIvectorLoadByFile(const char* vp_node, const char* iv_file)
+{
+	try{
+		if(client == nullptr){
+			return -1;
+		}
+		return client->kvpIvectorLoadByFile(vp_node,iv_file);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() << std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS int32_t KvpInsertNode(const char* vp_node)
+{
+	try{
+		if(client == nullptr){
+			return -1;
+		}
+		return client->kvpInsertNode(vp_node);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() <<std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS int32_t KvpDeleteNode(const char* vp_node)
+{
+	try{
+		if(client == nullptr){
+			return -1;
+		}
+		return client->kvpDeleteNode(vp_node);
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
 	}
@@ -253,7 +197,32 @@ extern "C" DLL_EXPORTS const char* KvpGetFingerprint()
 		return fingerprint_str.c_str();
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
-		return nullptr;
+	}
+}
+
+extern "C" DLL_EXPORTS _Rpc_LicenceInfo* KvpGetLicenceInfo()
+{
+	try{
+		if(client == nullptr) {
+			return nullptr;
+		}
+		Rpc_LicenceInfo info;
+		client->KvpGetLicenceInfo(info);
+		return asv_types_pack::Rpc_LicenceInfo__extract(info);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() <<std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS int32_t KvpSetLicence(const char* licence)
+{
+	try{
+		if(client == nullptr) {
+			return -1;
+		}
+		return client->kvpSetLicence(licence);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() << std::endl;
 	}
 }
 
@@ -269,54 +238,85 @@ extern "C" DLL_EXPORTS bool KvpIsLicenceValid()
 	}
 }
 
-extern "C" DLL_EXPORTS _Rpc_LicenceInfo* KvpGetLicenceInfo()
+extern "C" DLL_EXPORTS _Rpc_ModelInfo* KvpRegisterSpeakerByStream(int16_t* utt, int utt_size, const char* vp_node, const char* vp_dir, const char* spk_id)
+{
+	try{
+		if(client == nullptr){
+			return nullptr;
+		}
+
+		std::vector<short> utt_vec;
+		for (int i=0; i<utt_size; i++) {
+			utt_vec.push_back(utt[i]);
+		}
+
+		Rpc_ModelInfo info;
+		client->kvpRegisterSpeakerByStream(info, utt_vec, vp_node, vp_dir, spk_id);
+		return asv_types_pack::Rpc_ModelInfo__extract(info);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() <<std::endl;
+	}
+}
+
+extern "C" DLL_EXPORTS _Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(int16_t* utt, int utt_size, const char** vp_node_arr, int node_num, int top_n, int utt_type)
 {
 	try{
 		if(client == nullptr) {
 			return nullptr;
 		}
-		Rpc_LicenceInfo info;
-		client->KvpGetLicenceInfo(info);
 
-		_Rpc_LicenceInfo* ret = new _Rpc_LicenceInfo;
-		ret->dateStr = new char[info.dateStr.length() + 1];
-		strcpy(ret->dateStr, info.dateStr.c_str());
-		ret->fingerprint = new char[info.fingerprint.length() + 1];
-		strcpy(ret->fingerprint,info.fingerprint.c_str());
-		ret->maxOccurs = info.maxOccurs;
-		ret->RetCode = info.RetCode;
-		ret->__isset = new _Rpc_LicenceInfo__isset;
-		ret->__isset->dateStr = info.__isset.dateStr;
-		ret->__isset->fingerprint = info.__isset.fingerprint;
-		ret->__isset->maxOccurs = info.__isset.maxOccurs;
-		ret->__isset->RetCode = info.__isset.RetCode;
-		return ret;
-	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
-		return nullptr;
-	}
-}
-
-extern "C" DLL_EXPORTS void Delete_Rpc_LicenceInfo(_Rpc_LicenceInfo *ptr)
-{
-	if(ptr != nullptr){
-		delete ptr;
-		ptr = nullptr;
-	}
-}
-
-extern "C" DLL_EXPORTS int32_t KvpSetLicence(const char* licence)
-{
-	try{
-		if(client == nullptr) {
-			return -1;
+		std::vector<std::string> vp_node_arr_vec;
+		for (int i=0; i<node_num; i++) {
+			vp_node_arr_vec.push_back(vp_node_arr[i]);
 		}
 
-		return client->kvpSetLicence(licence);
+		std::vector<short> utt_vec;
+		for (int i=0; i<utt_size; i++) {
+			utt_vec.push_back(utt[i]);
+		}
+
+		Rpc_TopSpeakerInfo info;
+		client->kvpIdentifyTopSpeakerByStream(info, utt_vec, vp_node_arr_vec, node_num, top_n, utt_type);
+		return asv_types_pack::Rpc_TopSpeakerInfo__extract(info);
 	}catch(std::exception ex){
 		std::cout << "Error:" << ex.what() <<std::endl;
 	}
 }
+
+extern "C" DLL_EXPORTS void Delete_Asv_Type(_Asv_Type type,void* ptr)
+{
+	asv_types_pack::_Asv_Type__delete(type,ptr);
+}*/
+
+//extern "C" DLL_EXPORTS void Delete_Rpc_UttInfo(_Rpc_UttInfo *ptr) 
+//{
+//	asv_types_pack::_Rpc_UttInfo__delete(ptr);
+//}
+//
+//extern "C" DLL_EXPORTS void Delete_Rpc_ModelInfo(_Rpc_ModelInfo* ptr)
+//{
+//	asv_types_pack::_Rpc_ModelInfo__delete(ptr);
+//}
+//
+//extern "C" DLL_EXPORTS void Delete_Rpc_ScoreInfo(_Rpc_ScoreInfo* ptr)
+//{
+//	asv_types_pack::_Rpc_ScoreInfo__delete(ptr);
+//}
+//
+//extern "C" DLL_EXPORTS void Delete_Rpc_SpeakerScore(_Rpc_SpeakerScore* ptr)
+//{
+//	asv_types_pack::_Rpc_SpeakerScore__delete(ptr);
+//}
+//
+//extern "C" DLL_EXPORTS void Delete_Rpc_TopSpeakerInfo(_Rpc_TopSpeakerInfo* ptr)
+//{
+//	asv_types_pack::_Rpc_TopSpeakerInfo__delete(ptr);
+//}
+//
+//extern "C" DLL_EXPORTS void Delete_Rpc_LicenceInfo(_Rpc_LicenceInfo* ptr)
+//{
+//	asv_types_pack::_Rpc_LicenceInfo__delete(ptr);
+//}
 
 /*int main(int argc, char **argv)
 {

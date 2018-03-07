@@ -824,6 +824,10 @@ void Rpc_SpeakerScore::__set_Score(const double val) {
   this->Score = val;
 }
 
+void Rpc_SpeakerScore::__set_Node(const std::string& val) {
+  this->Node = val;
+}
+
 uint32_t Rpc_SpeakerScore::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
@@ -861,6 +865,14 @@ uint32_t Rpc_SpeakerScore::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->Node);
+          this->__isset.Node = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -886,6 +898,10 @@ uint32_t Rpc_SpeakerScore::write(::apache::thrift::protocol::TProtocol* oprot) c
   xfer += oprot->writeDouble(this->Score);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("Node", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->Node);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -895,17 +911,20 @@ void swap(Rpc_SpeakerScore &a, Rpc_SpeakerScore &b) {
   using ::std::swap;
   swap(a.Spkid, b.Spkid);
   swap(a.Score, b.Score);
+  swap(a.Node, b.Node);
   swap(a.__isset, b.__isset);
 }
 
 Rpc_SpeakerScore::Rpc_SpeakerScore(const Rpc_SpeakerScore& other6) {
   Spkid = other6.Spkid;
   Score = other6.Score;
+  Node = other6.Node;
   __isset = other6.__isset;
 }
 Rpc_SpeakerScore& Rpc_SpeakerScore::operator=(const Rpc_SpeakerScore& other7) {
   Spkid = other7.Spkid;
   Score = other7.Score;
+  Node = other7.Node;
   __isset = other7.__isset;
   return *this;
 }
@@ -914,6 +933,7 @@ void Rpc_SpeakerScore::printTo(std::ostream& out) const {
   out << "Rpc_SpeakerScore(";
   out << "Spkid=" << to_string(Spkid);
   out << ", " << "Score=" << to_string(Score);
+  out << ", " << "Node=" << to_string(Node);
   out << ")";
 }
 

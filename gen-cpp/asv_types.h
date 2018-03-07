@@ -333,9 +333,10 @@ inline std::ostream& operator<<(std::ostream& out, const Rpc_ScoreInfo& obj)
 }
 
 typedef struct _Rpc_SpeakerScore__isset {
-  _Rpc_SpeakerScore__isset() : Spkid(false), Score(false) {}
+  _Rpc_SpeakerScore__isset() : Spkid(false), Score(false), Node(false) {}
   bool Spkid :1;
   bool Score :1;
+  bool Node :1;
 } _Rpc_SpeakerScore__isset;
 
 class Rpc_SpeakerScore : public virtual ::apache::thrift::TBase {
@@ -343,12 +344,13 @@ class Rpc_SpeakerScore : public virtual ::apache::thrift::TBase {
 
   Rpc_SpeakerScore(const Rpc_SpeakerScore&);
   Rpc_SpeakerScore& operator=(const Rpc_SpeakerScore&);
-  Rpc_SpeakerScore() : Spkid(), Score(0) {
+  Rpc_SpeakerScore() : Spkid(), Score(0), Node() {
   }
 
   virtual ~Rpc_SpeakerScore() throw();
   std::string Spkid;
   double Score;
+  std::string Node;
 
   _Rpc_SpeakerScore__isset __isset;
 
@@ -356,11 +358,15 @@ class Rpc_SpeakerScore : public virtual ::apache::thrift::TBase {
 
   void __set_Score(const double val);
 
+  void __set_Node(const std::string& val);
+
   bool operator == (const Rpc_SpeakerScore & rhs) const
   {
     if (!(Spkid == rhs.Spkid))
       return false;
     if (!(Score == rhs.Score))
+      return false;
+    if (!(Node == rhs.Node))
       return false;
     return true;
   }
@@ -480,7 +486,6 @@ inline std::ostream& operator<<(std::ostream& out, const Rpc_TopSpeakerInfo& obj
 
 typedef struct _Rpc_LicenceInfo__isset {
   _Rpc_LicenceInfo__isset() : dateStr(false), maxOccurs(false), fingerprint(false), RetCode(false) {}
-  ~_Rpc_LicenceInfo__isset(){}
   bool dateStr :1;
   bool maxOccurs :1;
   bool fingerprint :1;

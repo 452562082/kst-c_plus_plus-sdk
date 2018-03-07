@@ -2222,6 +2222,225 @@ uint32_t kvpService_kvpDeleteNode_presult::read(::apache::thrift::protocol::TPro
 }
 
 
+kvpService_kvpMoveNode_args::~kvpService_kvpMoveNode_args() throw() {
+}
+
+
+uint32_t kvpService_kvpMoveNode_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->spk_id);
+          this->__isset.spk_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->origin);
+          this->__isset.origin = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->target);
+          this->__isset.target = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpMoveNode_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpMoveNode_args");
+
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->spk_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("origin", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->origin);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("target", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->target);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpMoveNode_pargs::~kvpService_kvpMoveNode_pargs() throw() {
+}
+
+
+uint32_t kvpService_kvpMoveNode_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpMoveNode_pargs");
+
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->spk_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("origin", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->origin)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("target", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->target)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpMoveNode_result::~kvpService_kvpMoveNode_result() throw() {
+}
+
+
+uint32_t kvpService_kvpMoveNode_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpMoveNode_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("kvpService_kvpMoveNode_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpMoveNode_presult::~kvpService_kvpMoveNode_presult() throw() {
+}
+
+
+uint32_t kvpService_kvpMoveNode_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 kvpService_kvpGetFingerprint_args::~kvpService_kvpGetFingerprint_args() throw() {
 }
 
@@ -3476,6 +3695,811 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_presult::read(::apache::thrift
   return xfer;
 }
 
+
+kvpService_kvpVerifySpeakerByStream_args::~kvpService_kvpVerifySpeakerByStream_args() throw() {
+}
+
+
+uint32_t kvpService_kvpVerifySpeakerByStream_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->utt.clear();
+            uint32_t _size46;
+            ::apache::thrift::protocol::TType _etype49;
+            xfer += iprot->readListBegin(_etype49, _size46);
+            this->utt.resize(_size46);
+            uint32_t _i50;
+            for (_i50 = 0; _i50 < _size46; ++_i50)
+            {
+              xfer += iprot->readI16(this->utt[_i50]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.utt = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->spk_id);
+          this->__isset.spk_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->vp_node);
+          this->__isset.vp_node = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->utt_type);
+          this->__isset.utt_type = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpVerifySpeakerByStream_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpVerifySpeakerByStream_args");
+
+  xfer += oprot->writeFieldBegin("utt", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>(this->utt.size()));
+    std::vector<int16_t> ::const_iterator _iter51;
+    for (_iter51 = this->utt.begin(); _iter51 != this->utt.end(); ++_iter51)
+    {
+      xfer += oprot->writeI16((*_iter51));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->spk_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->vp_node);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->utt_type);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpVerifySpeakerByStream_pargs::~kvpService_kvpVerifySpeakerByStream_pargs() throw() {
+}
+
+
+uint32_t kvpService_kvpVerifySpeakerByStream_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpVerifySpeakerByStream_pargs");
+
+  xfer += oprot->writeFieldBegin("utt", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>((*(this->utt)).size()));
+    std::vector<int16_t> ::const_iterator _iter52;
+    for (_iter52 = (*(this->utt)).begin(); _iter52 != (*(this->utt)).end(); ++_iter52)
+    {
+      xfer += oprot->writeI16((*_iter52));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->spk_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->vp_node)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32((*(this->utt_type)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpVerifySpeakerByStream_result::~kvpService_kvpVerifySpeakerByStream_result() throw() {
+}
+
+
+uint32_t kvpService_kvpVerifySpeakerByStream_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpVerifySpeakerByStream_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("kvpService_kvpVerifySpeakerByStream_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpVerifySpeakerByStream_presult::~kvpService_kvpVerifySpeakerByStream_presult() throw() {
+}
+
+
+uint32_t kvpService_kvpVerifySpeakerByStream_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+kvpService_kvpTempVerifySpeakerByStream_args::~kvpService_kvpTempVerifySpeakerByStream_args() throw() {
+}
+
+
+uint32_t kvpService_kvpTempVerifySpeakerByStream_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->utt1.clear();
+            uint32_t _size53;
+            ::apache::thrift::protocol::TType _etype56;
+            xfer += iprot->readListBegin(_etype56, _size53);
+            this->utt1.resize(_size53);
+            uint32_t _i57;
+            for (_i57 = 0; _i57 < _size53; ++_i57)
+            {
+              xfer += iprot->readI16(this->utt1[_i57]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.utt1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->sp_chan1);
+          this->__isset.sp_chan1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->utt_type1);
+          this->__isset.utt_type1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->utt2.clear();
+            uint32_t _size58;
+            ::apache::thrift::protocol::TType _etype61;
+            xfer += iprot->readListBegin(_etype61, _size58);
+            this->utt2.resize(_size58);
+            uint32_t _i62;
+            for (_i62 = 0; _i62 < _size58; ++_i62)
+            {
+              xfer += iprot->readI16(this->utt2[_i62]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.utt2 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->sp_chan2);
+          this->__isset.sp_chan2 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->utt_type2);
+          this->__isset.utt_type2 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpTempVerifySpeakerByStream_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpTempVerifySpeakerByStream_args");
+
+  xfer += oprot->writeFieldBegin("utt1", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>(this->utt1.size()));
+    std::vector<int16_t> ::const_iterator _iter63;
+    for (_iter63 = this->utt1.begin(); _iter63 != this->utt1.end(); ++_iter63)
+    {
+      xfer += oprot->writeI16((*_iter63));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("sp_chan1", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->sp_chan1);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->utt_type1);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 4);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>(this->utt2.size()));
+    std::vector<int16_t> ::const_iterator _iter64;
+    for (_iter64 = this->utt2.begin(); _iter64 != this->utt2.end(); ++_iter64)
+    {
+      xfer += oprot->writeI16((*_iter64));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("sp_chan2", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32(this->sp_chan2);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 6);
+  xfer += oprot->writeI32(this->utt_type2);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpTempVerifySpeakerByStream_pargs::~kvpService_kvpTempVerifySpeakerByStream_pargs() throw() {
+}
+
+
+uint32_t kvpService_kvpTempVerifySpeakerByStream_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpTempVerifySpeakerByStream_pargs");
+
+  xfer += oprot->writeFieldBegin("utt1", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>((*(this->utt1)).size()));
+    std::vector<int16_t> ::const_iterator _iter65;
+    for (_iter65 = (*(this->utt1)).begin(); _iter65 != (*(this->utt1)).end(); ++_iter65)
+    {
+      xfer += oprot->writeI16((*_iter65));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("sp_chan1", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->sp_chan1)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32((*(this->utt_type1)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 4);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>((*(this->utt2)).size()));
+    std::vector<int16_t> ::const_iterator _iter66;
+    for (_iter66 = (*(this->utt2)).begin(); _iter66 != (*(this->utt2)).end(); ++_iter66)
+    {
+      xfer += oprot->writeI16((*_iter66));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("sp_chan2", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32((*(this->sp_chan2)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 6);
+  xfer += oprot->writeI32((*(this->utt_type2)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpTempVerifySpeakerByStream_result::~kvpService_kvpTempVerifySpeakerByStream_result() throw() {
+}
+
+
+uint32_t kvpService_kvpTempVerifySpeakerByStream_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpTempVerifySpeakerByStream_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("kvpService_kvpTempVerifySpeakerByStream_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpTempVerifySpeakerByStream_presult::~kvpService_kvpTempVerifySpeakerByStream_presult() throw() {
+}
+
+
+uint32_t kvpService_kvpTempVerifySpeakerByStream_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+kvpService_kvpNodeGetList_args::~kvpService_kvpNodeGetList_args() throw() {
+}
+
+
+uint32_t kvpService_kvpNodeGetList_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->vp_node);
+          this->__isset.vp_node = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpNodeGetList_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpNodeGetList_args");
+
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->vp_node);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpNodeGetList_pargs::~kvpService_kvpNodeGetList_pargs() throw() {
+}
+
+
+uint32_t kvpService_kvpNodeGetList_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("kvpService_kvpNodeGetList_pargs");
+
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->vp_node)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpNodeGetList_result::~kvpService_kvpNodeGetList_result() throw() {
+}
+
+
+uint32_t kvpService_kvpNodeGetList_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size67;
+            ::apache::thrift::protocol::TType _etype70;
+            xfer += iprot->readListBegin(_etype70, _size67);
+            this->success.resize(_size67);
+            uint32_t _i71;
+            for (_i71 = 0; _i71 < _size67; ++_i71)
+            {
+              xfer += iprot->readString(this->success[_i71]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t kvpService_kvpNodeGetList_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("kvpService_kvpNodeGetList_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
+      std::vector<std::string> ::const_iterator _iter72;
+      for (_iter72 = this->success.begin(); _iter72 != this->success.end(); ++_iter72)
+      {
+        xfer += oprot->writeString((*_iter72));
+      }
+      xfer += oprot->writeListEnd();
+    }
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+kvpService_kvpNodeGetList_presult::~kvpService_kvpNodeGetList_presult() throw() {
+}
+
+
+uint32_t kvpService_kvpNodeGetList_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size73;
+            ::apache::thrift::protocol::TType _etype76;
+            xfer += iprot->readListBegin(_etype76, _size73);
+            (*(this->success)).resize(_size73);
+            uint32_t _i77;
+            for (_i77 = 0; _i77 < _size73; ++_i77)
+            {
+              xfer += iprot->readString((*(this->success))[_i77]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
 void kvpServiceClient::kvpPing(std::string& _return)
 {
   send_kvpPing();
@@ -4076,6 +5100,66 @@ int32_t kvpServiceClient::recv_kvpDeleteNode()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpDeleteNode failed: unknown result");
 }
 
+int32_t kvpServiceClient::kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target)
+{
+  send_kvpMoveNode(spk_id, origin, target);
+  return recv_kvpMoveNode();
+}
+
+void kvpServiceClient::send_kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("kvpMoveNode", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpMoveNode_pargs args;
+  args.spk_id = &spk_id;
+  args.origin = &origin;
+  args.target = &target;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int32_t kvpServiceClient::recv_kvpMoveNode()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("kvpMoveNode") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int32_t _return;
+  kvpService_kvpMoveNode_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpMoveNode failed: unknown result");
+}
+
 void kvpServiceClient::kvpGetFingerprint(std::string& _return)
 {
   send_kvpGetFingerprint();
@@ -4426,6 +5510,188 @@ void kvpServiceClient::recv_kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _r
     return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpIdentifyTopSpeakerByStream failed: unknown result");
+}
+
+void kvpServiceClient::kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+{
+  send_kvpVerifySpeakerByStream(utt, spk_id, vp_node, utt_type);
+  recv_kvpVerifySpeakerByStream(_return);
+}
+
+void kvpServiceClient::send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("kvpVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpVerifySpeakerByStream_pargs args;
+  args.utt = &utt;
+  args.spk_id = &spk_id;
+  args.vp_node = &vp_node;
+  args.utt_type = &utt_type;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void kvpServiceClient::recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("kvpVerifySpeakerByStream") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  kvpService_kvpVerifySpeakerByStream_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpVerifySpeakerByStream failed: unknown result");
+}
+
+void kvpServiceClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+{
+  send_kvpTempVerifySpeakerByStream(utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+  recv_kvpTempVerifySpeakerByStream(_return);
+}
+
+void kvpServiceClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("kvpTempVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpTempVerifySpeakerByStream_pargs args;
+  args.utt1 = &utt1;
+  args.sp_chan1 = &sp_chan1;
+  args.utt_type1 = &utt_type1;
+  args.utt2 = &utt2;
+  args.sp_chan2 = &sp_chan2;
+  args.utt_type2 = &utt_type2;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void kvpServiceClient::recv_kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("kvpTempVerifySpeakerByStream") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  kvpService_kvpTempVerifySpeakerByStream_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpTempVerifySpeakerByStream failed: unknown result");
+}
+
+void kvpServiceClient::kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node)
+{
+  send_kvpNodeGetList(vp_node);
+  recv_kvpNodeGetList(_return);
+}
+
+void kvpServiceClient::send_kvpNodeGetList(const std::string& vp_node)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("kvpNodeGetList", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpNodeGetList_pargs args;
+  args.vp_node = &vp_node;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void kvpServiceClient::recv_kvpNodeGetList(std::vector<std::string> & _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("kvpNodeGetList") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  kvpService_kvpNodeGetList_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpNodeGetList failed: unknown result");
 }
 
 bool kvpServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
@@ -4987,6 +6253,60 @@ void kvpServiceProcessor::process_kvpDeleteNode(int32_t seqid, ::apache::thrift:
   }
 }
 
+void kvpServiceProcessor::process_kvpMoveNode(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("kvpService.kvpMoveNode", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "kvpService.kvpMoveNode");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "kvpService.kvpMoveNode");
+  }
+
+  kvpService_kvpMoveNode_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "kvpService.kvpMoveNode", bytes);
+  }
+
+  kvpService_kvpMoveNode_result result;
+  try {
+    result.success = iface_->kvpMoveNode(args.spk_id, args.origin, args.target);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "kvpService.kvpMoveNode");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("kvpMoveNode", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "kvpService.kvpMoveNode");
+  }
+
+  oprot->writeMessageBegin("kvpMoveNode", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "kvpService.kvpMoveNode", bytes);
+  }
+}
+
 void kvpServiceProcessor::process_kvpGetFingerprint(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
@@ -5308,6 +6628,168 @@ void kvpServiceProcessor::process_kvpIdentifyTopSpeakerByStream(int32_t seqid, :
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "kvpService.kvpIdentifyTopSpeakerByStream", bytes);
+  }
+}
+
+void kvpServiceProcessor::process_kvpVerifySpeakerByStream(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("kvpService.kvpVerifySpeakerByStream", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "kvpService.kvpVerifySpeakerByStream");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "kvpService.kvpVerifySpeakerByStream");
+  }
+
+  kvpService_kvpVerifySpeakerByStream_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "kvpService.kvpVerifySpeakerByStream", bytes);
+  }
+
+  kvpService_kvpVerifySpeakerByStream_result result;
+  try {
+    iface_->kvpVerifySpeakerByStream(result.success, args.utt, args.spk_id, args.vp_node, args.utt_type);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "kvpService.kvpVerifySpeakerByStream");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("kvpVerifySpeakerByStream", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "kvpService.kvpVerifySpeakerByStream");
+  }
+
+  oprot->writeMessageBegin("kvpVerifySpeakerByStream", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "kvpService.kvpVerifySpeakerByStream", bytes);
+  }
+}
+
+void kvpServiceProcessor::process_kvpTempVerifySpeakerByStream(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("kvpService.kvpTempVerifySpeakerByStream", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "kvpService.kvpTempVerifySpeakerByStream");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "kvpService.kvpTempVerifySpeakerByStream");
+  }
+
+  kvpService_kvpTempVerifySpeakerByStream_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "kvpService.kvpTempVerifySpeakerByStream", bytes);
+  }
+
+  kvpService_kvpTempVerifySpeakerByStream_result result;
+  try {
+    iface_->kvpTempVerifySpeakerByStream(result.success, args.utt1, args.sp_chan1, args.utt_type1, args.utt2, args.sp_chan2, args.utt_type2);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "kvpService.kvpTempVerifySpeakerByStream");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("kvpTempVerifySpeakerByStream", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "kvpService.kvpTempVerifySpeakerByStream");
+  }
+
+  oprot->writeMessageBegin("kvpTempVerifySpeakerByStream", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "kvpService.kvpTempVerifySpeakerByStream", bytes);
+  }
+}
+
+void kvpServiceProcessor::process_kvpNodeGetList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("kvpService.kvpNodeGetList", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "kvpService.kvpNodeGetList");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "kvpService.kvpNodeGetList");
+  }
+
+  kvpService_kvpNodeGetList_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "kvpService.kvpNodeGetList", bytes);
+  }
+
+  kvpService_kvpNodeGetList_result result;
+  try {
+    iface_->kvpNodeGetList(result.success, args.vp_node);
+    result.__isset.success = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "kvpService.kvpNodeGetList");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("kvpNodeGetList", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "kvpService.kvpNodeGetList");
+  }
+
+  oprot->writeMessageBegin("kvpNodeGetList", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "kvpService.kvpNodeGetList", bytes);
   }
 }
 
@@ -6178,6 +7660,92 @@ int32_t kvpServiceConcurrentClient::recv_kvpDeleteNode(const int32_t seqid)
   } // end while(true)
 }
 
+int32_t kvpServiceConcurrentClient::kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target)
+{
+  int32_t seqid = send_kvpMoveNode(spk_id, origin, target);
+  return recv_kvpMoveNode(seqid);
+}
+
+int32_t kvpServiceConcurrentClient::send_kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("kvpMoveNode", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpMoveNode_pargs args;
+  args.spk_id = &spk_id;
+  args.origin = &origin;
+  args.target = &target;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int32_t kvpServiceConcurrentClient::recv_kvpMoveNode(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("kvpMoveNode") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int32_t _return;
+      kvpService_kvpMoveNode_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpMoveNode failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
 void kvpServiceConcurrentClient::kvpGetFingerprint(std::string& _return)
 {
   int32_t seqid = send_kvpGetFingerprint();
@@ -6677,6 +8245,266 @@ void kvpServiceConcurrentClient::recv_kvpIdentifyTopSpeakerByStream(Rpc_TopSpeak
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpIdentifyTopSpeakerByStream failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void kvpServiceConcurrentClient::kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+{
+  int32_t seqid = send_kvpVerifySpeakerByStream(utt, spk_id, vp_node, utt_type);
+  recv_kvpVerifySpeakerByStream(_return, seqid);
+}
+
+int32_t kvpServiceConcurrentClient::send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("kvpVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpVerifySpeakerByStream_pargs args;
+  args.utt = &utt;
+  args.spk_id = &spk_id;
+  args.vp_node = &vp_node;
+  args.utt_type = &utt_type;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void kvpServiceConcurrentClient::recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("kvpVerifySpeakerByStream") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      kvpService_kvpVerifySpeakerByStream_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpVerifySpeakerByStream failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void kvpServiceConcurrentClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+{
+  int32_t seqid = send_kvpTempVerifySpeakerByStream(utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+  recv_kvpTempVerifySpeakerByStream(_return, seqid);
+}
+
+int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("kvpTempVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpTempVerifySpeakerByStream_pargs args;
+  args.utt1 = &utt1;
+  args.sp_chan1 = &sp_chan1;
+  args.utt_type1 = &utt_type1;
+  args.utt2 = &utt2;
+  args.sp_chan2 = &sp_chan2;
+  args.utt_type2 = &utt_type2;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void kvpServiceConcurrentClient::recv_kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("kvpTempVerifySpeakerByStream") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      kvpService_kvpTempVerifySpeakerByStream_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpTempVerifySpeakerByStream failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void kvpServiceConcurrentClient::kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node)
+{
+  int32_t seqid = send_kvpNodeGetList(vp_node);
+  recv_kvpNodeGetList(_return, seqid);
+}
+
+int32_t kvpServiceConcurrentClient::send_kvpNodeGetList(const std::string& vp_node)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("kvpNodeGetList", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  kvpService_kvpNodeGetList_pargs args;
+  args.vp_node = &vp_node;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void kvpServiceConcurrentClient::recv_kvpNodeGetList(std::vector<std::string> & _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("kvpNodeGetList") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      kvpService_kvpNodeGetList_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpNodeGetList failed: unknown result");
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);

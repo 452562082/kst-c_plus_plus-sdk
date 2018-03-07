@@ -14,6 +14,7 @@
     <ProjectGuid>{5BEE2866-6BAE-4177-BDE6-0B7709FCB0C1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test_rpc</RootNamespace>
+    <ProjectName>kst-c++-sdk</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -47,6 +48,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>boost_1_53_0\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;thrift-0.10.0\lib\cpp\src\thrift;thrift-0.10.0\lib\cpp\src</IncludePath>
     <LibraryPath>openssl-1.1.0\;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;thrift-0.10.0\lib\cpp\lib;boost_1_53_0\stage\lib</LibraryPath>
+    <TargetName>kst_sdk</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,12 +83,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="asv_rpc.cpp" />
+    <ClCompile Include="asv_types_pack.cpp" />
     <ClCompile Include="gen-cpp\asv_constants.cpp" />
     <ClCompile Include="gen-cpp\asv_types.cpp" />
     <ClCompile Include="gen-cpp\kvpService.cpp" />
-    <ClCompile Include="test_rpc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="asv_rpc.h" />
+    <ClInclude Include="asv_types_pack.h" />
     <ClInclude Include="gen-cpp\asv_constants.h" />
     <ClInclude Include="gen-cpp\asv_types.h" />
     <ClInclude Include="gen-cpp\kvpService.h" />

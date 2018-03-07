@@ -195,6 +195,24 @@ class kvpServiceHandler : virtual public kvpServiceIf {
   }
 
   /**
+   * 将说话人模型从一个库移到另一个库。
+   * 
+   * @param spk_id 说话人ID。
+   * @param origin 原始库。
+   * @param target 目标库。
+   * 
+   * @return KVP_CODE
+   * 
+   * @param spk_id
+   * @param origin
+   * @param target
+   */
+  int32_t kvpMoveNode(const std::string& spk_id, const std::string& origin, const std::string& target) {
+    // Your implementation goes here
+    printf("kvpMoveNode\n");
+  }
+
+  /**
    * 获取机器指纹。
    * 
    * @return 机器人指纹字符串。
@@ -241,7 +259,7 @@ class kvpServiceHandler : virtual public kvpServiceIf {
   /**
    * 注册说话人（二进制流格式）。
    * 
-   * @param [in] utt 语音流。
+   * @param [in] utt 语音路径。
    * @param [in] vp_node 说话人待注册库节点名称。
    * @param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
    * @param [in] spk_id 说话人ID。
@@ -278,6 +296,64 @@ class kvpServiceHandler : virtual public kvpServiceIf {
   void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type) {
     // Your implementation goes here
     printf("kvpIdentifyTopSpeakerByStream\n");
+  }
+
+  /**
+   * 说话人确认（二进制流格式）。
+   * 
+   * @param [in] utt 语音流。
+   *  @param [in] spk_id 说话人ID。
+   * @param [in] vp_node 库节点。
+   * @param [in] utt_type 语音场景类型。
+   * 
+   * @return Rpc_ScoreInfo 得分信息
+   * 
+   * @param utt
+   * @param spk_id
+   * @param vp_node
+   * @param utt_type
+   */
+  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type) {
+    // Your implementation goes here
+    printf("kvpVerifySpeakerByStream\n");
+  }
+
+  /**
+   * 1:1验证(给定2段语音进行比较，二进制流格式)。
+   * 
+   * @param [in] utt1 第1段语音流。
+   * @oaram [in] sp_chan1 指定第1段语音声道。
+   * @param [in] utt_type1 指定第1段语音场景类型。
+   * @param [in] utt2  第2段语音流。
+   * @oaram [in] sp_chan2 指定第2段语音声道。
+   * @param [in] utt_type2 指定第2段语音场景类型。
+   * 
+   * @return Rpc_ScoreInfo 验证得分信息
+   * 
+   * @param utt1
+   * @param sp_chan1
+   * @param utt_type1
+   * @param utt2
+   * @param sp_chan2
+   * @param utt_type2
+   */
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2) {
+    // Your implementation goes here
+    printf("kvpTempVerifySpeakerByStream\n");
+  }
+
+  /**
+   * 获取某节点说话人ID列表。
+   * 
+   * @param [in] vp_node 节点名称。
+   * 
+   * @return 说话人ID列表
+   * 
+   * @param vp_node
+   */
+  void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node) {
+    // Your implementation goes here
+    printf("kvpNodeGetList\n");
   }
 
 };

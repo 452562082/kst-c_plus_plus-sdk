@@ -46,6 +46,7 @@
  * Did you also notice that Thrift supports C style comments?
  */
 namespace go asv
+namespace java vpr
 
 struct Rpc_UttInfo {
     1: string Utt,
@@ -88,7 +89,8 @@ struct Rpc_ScoreInfo {
 
 struct Rpc_SpeakerScore {
     1: string Spkid,
-    2: double Score
+    2: double Score,
+    3: string Node
 }
 
 struct Rpc_TopSpeakerInfo {
@@ -216,6 +218,17 @@ service kvpService {
 	 *	@return KVP_CODE
 	 */
     i32 kvpDeleteNode(1:string vp_node),
+
+    /**
+     *      将说话人模型从一个库移到另一个库。
+     *
+     *      @param spk_id 说话人ID。
+     *      @param origin 原始库。
+     *      @param target 目标库。
+     *
+     *      @return KVP_CODE
+     */
+    i32 kvpMoveNode(1:string spk_id, 2:string origin, 3:string target),
 			
 	/**
 	 *	获取机器指纹。
@@ -250,7 +263,7 @@ service kvpService {
 	/**
 	 *	注册说话人（二进制流格式）。
 	 *
-	 *	@param [in] utt 语音流。
+	 *	@param [in] utt 语音路径。
 	 *	@param [in] vp_node 说话人待注册库节点名称。
 	 *	@param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
 	 *	@param [in] spk_id 说话人ID。
@@ -271,4 +284,40 @@ service kvpService {
 	 *	@return Rpc_TopSpeakerInfo Top n得分信息
 	 */
     Rpc_TopSpeakerInfo kvpIdentifyTopSpeakerByStream(1:list<i16> utt, 2:list<string> vp_node_arr, 3:i32 node_num, 4:i32 top_n, 5:i32 utt_type),
+	
+
+    /**
+	 *	说话人确认（二进制流格式）。
+	 *
+	 *	@param [in] utt 语音流。
+	 *  @param [in] spk_id 说话人ID。
+	 *	@param [in] vp_node 库节点。
+	 *	@param [in] utt_type 语音场景类型。
+	 *
+	 *	@return Rpc_ScoreInfo 得分信息
+	 */
+    Rpc_ScoreInfo kvpVerifySpeakerByStream(1:list<i16> utt, 2:string spk_id, 3:string vp_node, 4:i32 utt_type),
+	
+	/**
+	 *	1:1验证(给定2段语音进行比较，二进制流格式)。
+	 *
+	 *	@param [in] utt1 第1段语音流。
+	 *	@oaram [in] sp_chan1 指定第1段语音声道。
+	 *	@param [in] utt_type1 指定第1段语音场景类型。
+	 *	@param [in] utt2  第2段语音流。
+	 *	@oaram [in] sp_chan2 指定第2段语音声道。
+	 *	@param [in] utt_type2 指定第2段语音场景类型。
+	 *
+	 *	@return Rpc_ScoreInfo 验证得分信息
+	 */	
+    Rpc_ScoreInfo kvpTempVerifySpeakerByStream(1:list<i16> utt1, 2:i32 sp_chan1, 3:i32 utt_type1, 4:list<i16> utt2, 5:i32 sp_chan2, 6:i32 utt_type2),
+
+    /**
+	 *	获取某节点说话人ID列表。
+	 *
+	 *	@param [in] vp_node 节点名称。
+	 *
+	 *	@return 说话人ID列表
+	 */
+    list<string> kvpNodeGetList(1:string vp_node),
 }
