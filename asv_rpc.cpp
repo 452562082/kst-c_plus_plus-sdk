@@ -173,14 +173,14 @@ _Rpc_UttInfo* AsvRpcEngine::KvpGetUttInfo(const std::string& wav_path)
 	}
 }
 
-int32_t AsvRpcEngine::KvpModelRemoveBySpkid(const string& vp_node, const string& vp_dir, const string& spk_id)
+int32_t AsvRpcEngine::KvpModelRemoveBySpkid(const string& vp_node, const string& spk_id)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
-		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpModelRemoveBySpkid(vp_node,vp_dir,spk_id);
+		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpModelRemoveBySpkid(vp_node,"",spk_id);
 		ReleaseMutex(m_mutex);
 		return ret;
 	}catch(std::exception ex){
@@ -188,7 +188,7 @@ int32_t AsvRpcEngine::KvpModelRemoveBySpkid(const string& vp_node, const string&
 	}
 }
 
-_Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByFile(const string& utt, const string& vp_node, const string& vp_dir, const string& spk_id, int32_t sp_chan)
+_Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByFile(const string& utt, const string& vp_node, const string& spk_id, int32_t sp_chan)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
@@ -196,7 +196,7 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByFile(const string& utt, const 
 			throw new ClientNilException();
 		}
 		Rpc_ModelInfo info;
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByFile(info, utt, vp_node, vp_dir, spk_id, sp_chan);
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByFile(info, utt, vp_node, "", spk_id, sp_chan);
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ModelInfo__extract(info);
 	}catch(std::exception ex){
@@ -360,7 +360,7 @@ bool AsvRpcEngine::KvpIsLicenceValid()
 	}
 }
 
-_Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const string& vp_node, const string& vp_dir, const string& spk_id)
+_Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const string& vp_node, const string& spk_id)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
@@ -369,7 +369,7 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16
 		}
 
 		Rpc_ModelInfo info;
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByStream(info, utt, vp_node, vp_dir, spk_id);
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByStream(info, utt, vp_node, "", spk_id);
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ModelInfo__extract(info);
 	}catch(std::exception ex){
@@ -394,7 +394,7 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vect
 	}
 }
 
-_Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, int32_t sp_chan1, int32_t utt_type1, std::vector<int16_t> utt2, int32_t sp_chan2, int32_t utt_type2)
+_Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, int32_t utt_type1, std::vector<int16_t> utt2, int32_t utt_type2)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
@@ -403,7 +403,7 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int
 		}
 
 		Rpc_ScoreInfo info;
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpTempVerifySpeakerByStream(info, utt1, sp_chan1, utt_type1, utt2,sp_chan2, utt_type2);
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpTempVerifySpeakerByStream(info, utt1, utt_type1, utt2, utt_type2);
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){

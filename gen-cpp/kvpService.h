@@ -266,25 +266,21 @@ class kvpServiceIf {
   virtual void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type) = 0;
 
   /**
-   * 1:1验证(给定2段语音进行比较，二进制流格式)。
+   * 1:1验证(给定2段语音流进行比较)。
    * 
    * @param [in] utt1 第1段语音流。
-   * @oaram [in] sp_chan1 指定第1段语音声道。
    * @param [in] utt_type1 指定第1段语音场景类型。
    * @param [in] utt2  第2段语音流。
-   * @oaram [in] sp_chan2 指定第2段语音声道。
    * @param [in] utt_type2 指定第2段语音场景类型。
    * 
    * @return Rpc_ScoreInfo 验证得分信息
    * 
    * @param utt1
-   * @param sp_chan1
    * @param utt_type1
    * @param utt2
-   * @param sp_chan2
    * @param utt_type2
    */
-  virtual void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2) = 0;
+  virtual void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2) = 0;
 
   /**
    * 获取某节点说话人ID列表。
@@ -386,7 +382,7 @@ class kvpServiceNull : virtual public kvpServiceIf {
   void kvpVerifySpeakerByStream(Rpc_ScoreInfo& /* _return */, const std::vector<int16_t> & /* utt */, const std::string& /* spk_id */, const std::string& /* vp_node */, const int32_t /* utt_type */) {
     return;
   }
-  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& /* _return */, const std::vector<int16_t> & /* utt1 */, const int32_t /* sp_chan1 */, const int32_t /* utt_type1 */, const std::vector<int16_t> & /* utt2 */, const int32_t /* sp_chan2 */, const int32_t /* utt_type2 */) {
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& /* _return */, const std::vector<int16_t> & /* utt1 */, const int32_t /* utt_type1 */, const std::vector<int16_t> & /* utt2 */, const int32_t /* utt_type2 */) {
     return;
   }
   void kvpNodeGetList(std::vector<std::string> & /* _return */, const std::string& /* vp_node */) {
@@ -2450,12 +2446,10 @@ class kvpService_kvpVerifySpeakerByStream_presult {
 };
 
 typedef struct _kvpService_kvpTempVerifySpeakerByStream_args__isset {
-  _kvpService_kvpTempVerifySpeakerByStream_args__isset() : utt1(false), sp_chan1(false), utt_type1(false), utt2(false), sp_chan2(false), utt_type2(false) {}
+  _kvpService_kvpTempVerifySpeakerByStream_args__isset() : utt1(false), utt_type1(false), utt2(false), utt_type2(false) {}
   bool utt1 :1;
-  bool sp_chan1 :1;
   bool utt_type1 :1;
   bool utt2 :1;
-  bool sp_chan2 :1;
   bool utt_type2 :1;
 } _kvpService_kvpTempVerifySpeakerByStream_args__isset;
 
@@ -2464,28 +2458,22 @@ class kvpService_kvpTempVerifySpeakerByStream_args {
 
   kvpService_kvpTempVerifySpeakerByStream_args(const kvpService_kvpTempVerifySpeakerByStream_args&);
   kvpService_kvpTempVerifySpeakerByStream_args& operator=(const kvpService_kvpTempVerifySpeakerByStream_args&);
-  kvpService_kvpTempVerifySpeakerByStream_args() : sp_chan1(0), utt_type1(0), sp_chan2(0), utt_type2(0) {
+  kvpService_kvpTempVerifySpeakerByStream_args() : utt_type1(0), utt_type2(0) {
   }
 
   virtual ~kvpService_kvpTempVerifySpeakerByStream_args() throw();
   std::vector<int16_t>  utt1;
-  int32_t sp_chan1;
   int32_t utt_type1;
   std::vector<int16_t>  utt2;
-  int32_t sp_chan2;
   int32_t utt_type2;
 
   _kvpService_kvpTempVerifySpeakerByStream_args__isset __isset;
 
   void __set_utt1(const std::vector<int16_t> & val);
 
-  void __set_sp_chan1(const int32_t val);
-
   void __set_utt_type1(const int32_t val);
 
   void __set_utt2(const std::vector<int16_t> & val);
-
-  void __set_sp_chan2(const int32_t val);
 
   void __set_utt_type2(const int32_t val);
 
@@ -2493,13 +2481,9 @@ class kvpService_kvpTempVerifySpeakerByStream_args {
   {
     if (!(utt1 == rhs.utt1))
       return false;
-    if (!(sp_chan1 == rhs.sp_chan1))
-      return false;
     if (!(utt_type1 == rhs.utt_type1))
       return false;
     if (!(utt2 == rhs.utt2))
-      return false;
-    if (!(sp_chan2 == rhs.sp_chan2))
       return false;
     if (!(utt_type2 == rhs.utt_type2))
       return false;
@@ -2523,10 +2507,8 @@ class kvpService_kvpTempVerifySpeakerByStream_pargs {
 
   virtual ~kvpService_kvpTempVerifySpeakerByStream_pargs() throw();
   const std::vector<int16_t> * utt1;
-  const int32_t* sp_chan1;
   const int32_t* utt_type1;
   const std::vector<int16_t> * utt2;
-  const int32_t* sp_chan2;
   const int32_t* utt_type2;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2771,8 +2753,8 @@ class kvpServiceClient : virtual public kvpServiceIf {
   void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
   void send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
   void recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return);
-  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
-  void send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2);
+  void send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2);
   void recv_kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return);
   void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node);
   void send_kvpNodeGetList(const std::string& vp_node);
@@ -3036,13 +3018,13 @@ class kvpServiceMultiface : virtual public kvpServiceIf {
     return;
   }
 
-  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2) {
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->kvpTempVerifySpeakerByStream(_return, utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+      ifaces_[i]->kvpTempVerifySpeakerByStream(_return, utt1, utt_type1, utt2, utt_type2);
     }
-    ifaces_[i]->kvpTempVerifySpeakerByStream(_return, utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+    ifaces_[i]->kvpTempVerifySpeakerByStream(_return, utt1, utt_type1, utt2, utt_type2);
     return;
   }
 
@@ -3140,8 +3122,8 @@ class kvpServiceConcurrentClient : virtual public kvpServiceIf {
   void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
   int32_t send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
   void recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const int32_t seqid);
-  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
-  int32_t send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2);
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2);
+  int32_t send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2);
   void recv_kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const int32_t seqid);
   void kvpNodeGetList(std::vector<std::string> & _return, const std::string& vp_node);
   int32_t send_kvpNodeGetList(const std::string& vp_node);

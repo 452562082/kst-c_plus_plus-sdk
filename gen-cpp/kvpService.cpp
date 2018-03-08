@@ -4006,21 +4006,13 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::read(::apache::thrift::pr
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->sp_chan1);
-          this->__isset.sp_chan1 = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->utt_type1);
           this->__isset.utt_type1 = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->utt2.clear();
@@ -4040,15 +4032,7 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::read(::apache::thrift::pr
           xfer += iprot->skip(ftype);
         }
         break;
-      case 5:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->sp_chan2);
-          this->__isset.sp_chan2 = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 6:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->utt_type2);
           this->__isset.utt_type2 = true;
@@ -4085,15 +4069,11 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::write(::apache::thrift::p
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("sp_chan1", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32(this->sp_chan1);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 2);
   xfer += oprot->writeI32(this->utt_type1);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 4);
+  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>(this->utt2.size()));
     std::vector<int16_t> ::const_iterator _iter64;
@@ -4105,11 +4085,7 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::write(::apache::thrift::p
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("sp_chan2", ::apache::thrift::protocol::T_I32, 5);
-  xfer += oprot->writeI32(this->sp_chan2);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 6);
+  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 4);
   xfer += oprot->writeI32(this->utt_type2);
   xfer += oprot->writeFieldEnd();
 
@@ -4140,15 +4116,11 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_pargs::write(::apache::thrift::
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("sp_chan1", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32((*(this->sp_chan1)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 2);
   xfer += oprot->writeI32((*(this->utt_type1)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 4);
+  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>((*(this->utt2)).size()));
     std::vector<int16_t> ::const_iterator _iter66;
@@ -4160,11 +4132,7 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_pargs::write(::apache::thrift::
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("sp_chan2", ::apache::thrift::protocol::T_I32, 5);
-  xfer += oprot->writeI32((*(this->sp_chan2)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 6);
+  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 4);
   xfer += oprot->writeI32((*(this->utt_type2)));
   xfer += oprot->writeFieldEnd();
 
@@ -5573,23 +5541,21 @@ void kvpServiceClient::recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpVerifySpeakerByStream failed: unknown result");
 }
 
-void kvpServiceClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+void kvpServiceClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
 {
-  send_kvpTempVerifySpeakerByStream(utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+  send_kvpTempVerifySpeakerByStream(utt1, utt_type1, utt2, utt_type2);
   recv_kvpTempVerifySpeakerByStream(_return);
 }
 
-void kvpServiceClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+void kvpServiceClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("kvpTempVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
 
   kvpService_kvpTempVerifySpeakerByStream_pargs args;
   args.utt1 = &utt1;
-  args.sp_chan1 = &sp_chan1;
   args.utt_type1 = &utt_type1;
   args.utt2 = &utt2;
-  args.sp_chan2 = &sp_chan2;
   args.utt_type2 = &utt_type2;
   args.write(oprot_);
 
@@ -6708,7 +6674,7 @@ void kvpServiceProcessor::process_kvpTempVerifySpeakerByStream(int32_t seqid, ::
 
   kvpService_kvpTempVerifySpeakerByStream_result result;
   try {
-    iface_->kvpTempVerifySpeakerByStream(result.success, args.utt1, args.sp_chan1, args.utt_type1, args.utt2, args.sp_chan2, args.utt_type2);
+    iface_->kvpTempVerifySpeakerByStream(result.success, args.utt1, args.utt_type1, args.utt2, args.utt_type2);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -8341,13 +8307,13 @@ void kvpServiceConcurrentClient::recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _r
   } // end while(true)
 }
 
-void kvpServiceConcurrentClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+void kvpServiceConcurrentClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
 {
-  int32_t seqid = send_kvpTempVerifySpeakerByStream(utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
+  int32_t seqid = send_kvpTempVerifySpeakerByStream(utt1, utt_type1, utt2, utt_type2);
   recv_kvpTempVerifySpeakerByStream(_return, seqid);
 }
 
-int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2)
+int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -8355,10 +8321,8 @@ int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std:
 
   kvpService_kvpTempVerifySpeakerByStream_pargs args;
   args.utt1 = &utt1;
-  args.sp_chan1 = &sp_chan1;
   args.utt_type1 = &utt_type1;
   args.utt2 = &utt2;
-  args.sp_chan2 = &sp_chan2;
   args.utt_type2 = &utt_type2;
   args.write(oprot_);
 

@@ -319,25 +319,21 @@ class kvpServiceHandler : virtual public kvpServiceIf {
   }
 
   /**
-   * 1:1验证(给定2段语音进行比较，二进制流格式)。
+   * 1:1验证(给定2段语音流进行比较)。
    * 
    * @param [in] utt1 第1段语音流。
-   * @oaram [in] sp_chan1 指定第1段语音声道。
    * @param [in] utt_type1 指定第1段语音场景类型。
    * @param [in] utt2  第2段语音流。
-   * @oaram [in] sp_chan2 指定第2段语音声道。
    * @param [in] utt_type2 指定第2段语音场景类型。
    * 
    * @return Rpc_ScoreInfo 验证得分信息
    * 
    * @param utt1
-   * @param sp_chan1
    * @param utt_type1
    * @param utt2
-   * @param sp_chan2
    * @param utt_type2
    */
-  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t sp_chan1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t sp_chan2, const int32_t utt_type2) {
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2) {
     // Your implementation goes here
     printf("kvpTempVerifySpeakerByStream\n");
   }

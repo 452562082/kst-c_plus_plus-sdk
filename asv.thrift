@@ -46,7 +46,6 @@
  * Did you also notice that Thrift supports C style comments?
  */
 namespace go asv
-namespace java vpr
 
 struct Rpc_UttInfo {
     1: string Utt,
@@ -284,7 +283,6 @@ service kvpService {
 	 *	@return Rpc_TopSpeakerInfo Top n得分信息
 	 */
     Rpc_TopSpeakerInfo kvpIdentifyTopSpeakerByStream(1:list<i16> utt, 2:list<string> vp_node_arr, 3:i32 node_num, 4:i32 top_n, 5:i32 utt_type),
-	
 
     /**
 	 *	说话人确认（二进制流格式）。
@@ -297,20 +295,18 @@ service kvpService {
 	 *	@return Rpc_ScoreInfo 得分信息
 	 */
     Rpc_ScoreInfo kvpVerifySpeakerByStream(1:list<i16> utt, 2:string spk_id, 3:string vp_node, 4:i32 utt_type),
-	
+
 	/**
-	 *	1:1验证(给定2段语音进行比较，二进制流格式)。
+	 *	1:1验证(给定2段语音流进行比较)。
 	 *
 	 *	@param [in] utt1 第1段语音流。
-	 *	@oaram [in] sp_chan1 指定第1段语音声道。
 	 *	@param [in] utt_type1 指定第1段语音场景类型。
 	 *	@param [in] utt2  第2段语音流。
-	 *	@oaram [in] sp_chan2 指定第2段语音声道。
 	 *	@param [in] utt_type2 指定第2段语音场景类型。
 	 *
 	 *	@return Rpc_ScoreInfo 验证得分信息
 	 */	
-    Rpc_ScoreInfo kvpTempVerifySpeakerByStream(1:list<i16> utt1, 2:i32 sp_chan1, 3:i32 utt_type1, 4:list<i16> utt2, 5:i32 sp_chan2, 6:i32 utt_type2),
+    Rpc_ScoreInfo kvpTempVerifySpeakerByStream(1:list<i16> utt1, 2:i32 utt_type1, 3:list<i16> utt2, 4:i32 utt_type2),
 
     /**
 	 *	获取某节点说话人ID列表。
