@@ -3172,6 +3172,14 @@ uint32_t kvpService_kvpRegisterSpeakerByStream_args::read(::apache::thrift::prot
         }
         break;
       case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->samp_rate);
+          this->__isset.samp_rate = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->vp_node);
           this->__isset.vp_node = true;
@@ -3179,7 +3187,7 @@ uint32_t kvpService_kvpRegisterSpeakerByStream_args::read(::apache::thrift::prot
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->vp_dir);
           this->__isset.vp_dir = true;
@@ -3187,7 +3195,7 @@ uint32_t kvpService_kvpRegisterSpeakerByStream_args::read(::apache::thrift::prot
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 5:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->spk_id);
           this->__isset.spk_id = true;
@@ -3224,15 +3232,19 @@ uint32_t kvpService_kvpRegisterSpeakerByStream_args::write(::apache::thrift::pro
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("samp_rate", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->samp_rate);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString(this->vp_node);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_dir", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("vp_dir", ::apache::thrift::protocol::T_STRING, 4);
   xfer += oprot->writeString(this->vp_dir);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 5);
   xfer += oprot->writeString(this->spk_id);
   xfer += oprot->writeFieldEnd();
 
@@ -3263,15 +3275,19 @@ uint32_t kvpService_kvpRegisterSpeakerByStream_pargs::write(::apache::thrift::pr
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("samp_rate", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->samp_rate)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString((*(this->vp_node)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_dir", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("vp_dir", ::apache::thrift::protocol::T_STRING, 4);
   xfer += oprot->writeString((*(this->vp_dir)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 5);
   xfer += oprot->writeString((*(this->spk_id)));
   xfer += oprot->writeFieldEnd();
 
@@ -3435,6 +3451,14 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_args::read(::apache::thrift::p
         }
         break;
       case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->samp_rate);
+          this->__isset.samp_rate = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->vp_node_arr.clear();
@@ -3454,7 +3478,7 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_args::read(::apache::thrift::p
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->node_num);
           this->__isset.node_num = true;
@@ -3462,7 +3486,7 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_args::read(::apache::thrift::p
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 5:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->top_n);
           this->__isset.top_n = true;
@@ -3470,7 +3494,7 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_args::read(::apache::thrift::p
           xfer += iprot->skip(ftype);
         }
         break;
-      case 5:
+      case 6:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->utt_type);
           this->__isset.utt_type = true;
@@ -3507,7 +3531,11 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_args::write(::apache::thrift::
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_node_arr", ::apache::thrift::protocol::T_LIST, 2);
+  xfer += oprot->writeFieldBegin("samp_rate", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->samp_rate);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vp_node_arr", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->vp_node_arr.size()));
     std::vector<std::string> ::const_iterator _iter43;
@@ -3519,15 +3547,15 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_args::write(::apache::thrift::
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("node_num", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("node_num", ::apache::thrift::protocol::T_I32, 4);
   xfer += oprot->writeI32(this->node_num);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("top_n", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("top_n", ::apache::thrift::protocol::T_I32, 5);
   xfer += oprot->writeI32(this->top_n);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 6);
   xfer += oprot->writeI32(this->utt_type);
   xfer += oprot->writeFieldEnd();
 
@@ -3558,7 +3586,11 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_pargs::write(::apache::thrift:
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_node_arr", ::apache::thrift::protocol::T_LIST, 2);
+  xfer += oprot->writeFieldBegin("samp_rate", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->samp_rate)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("vp_node_arr", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->vp_node_arr)).size()));
     std::vector<std::string> ::const_iterator _iter45;
@@ -3570,15 +3602,15 @@ uint32_t kvpService_kvpIdentifyTopSpeakerByStream_pargs::write(::apache::thrift:
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("node_num", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("node_num", ::apache::thrift::protocol::T_I32, 4);
   xfer += oprot->writeI32((*(this->node_num)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("top_n", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("top_n", ::apache::thrift::protocol::T_I32, 5);
   xfer += oprot->writeI32((*(this->top_n)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 6);
   xfer += oprot->writeI32((*(this->utt_type)));
   xfer += oprot->writeFieldEnd();
 
@@ -3742,6 +3774,14 @@ uint32_t kvpService_kvpVerifySpeakerByStream_args::read(::apache::thrift::protoc
         }
         break;
       case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->samp_rate);
+          this->__isset.samp_rate = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->spk_id);
           this->__isset.spk_id = true;
@@ -3749,7 +3789,7 @@ uint32_t kvpService_kvpVerifySpeakerByStream_args::read(::apache::thrift::protoc
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->vp_node);
           this->__isset.vp_node = true;
@@ -3757,7 +3797,7 @@ uint32_t kvpService_kvpVerifySpeakerByStream_args::read(::apache::thrift::protoc
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 5:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->utt_type);
           this->__isset.utt_type = true;
@@ -3794,15 +3834,19 @@ uint32_t kvpService_kvpVerifySpeakerByStream_args::write(::apache::thrift::proto
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("samp_rate", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->samp_rate);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString(this->spk_id);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 4);
   xfer += oprot->writeString(this->vp_node);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 5);
   xfer += oprot->writeI32(this->utt_type);
   xfer += oprot->writeFieldEnd();
 
@@ -3833,15 +3877,19 @@ uint32_t kvpService_kvpVerifySpeakerByStream_pargs::write(::apache::thrift::prot
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("samp_rate", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->samp_rate)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("spk_id", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString((*(this->spk_id)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("vp_node", ::apache::thrift::protocol::T_STRING, 4);
   xfer += oprot->writeString((*(this->vp_node)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("utt_type", ::apache::thrift::protocol::T_I32, 5);
   xfer += oprot->writeI32((*(this->utt_type)));
   xfer += oprot->writeFieldEnd();
 
@@ -4006,13 +4054,21 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::read(::apache::thrift::pr
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->samp_rate_1);
+          this->__isset.samp_rate_1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->utt_type1);
           this->__isset.utt_type1 = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->utt2.clear();
@@ -4032,7 +4088,15 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::read(::apache::thrift::pr
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->samp_rate_2);
+          this->__isset.samp_rate_2 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->utt_type2);
           this->__isset.utt_type2 = true;
@@ -4069,11 +4133,15 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::write(::apache::thrift::p
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeFieldBegin("samp_rate_1", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->samp_rate_1);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 3);
   xfer += oprot->writeI32(this->utt_type1);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 3);
+  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>(this->utt2.size()));
     std::vector<int16_t> ::const_iterator _iter64;
@@ -4085,7 +4153,11 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_args::write(::apache::thrift::p
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("samp_rate_2", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32(this->samp_rate_2);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 6);
   xfer += oprot->writeI32(this->utt_type2);
   xfer += oprot->writeFieldEnd();
 
@@ -4116,11 +4188,15 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_pargs::write(::apache::thrift::
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeFieldBegin("samp_rate_1", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->samp_rate_1)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type1", ::apache::thrift::protocol::T_I32, 3);
   xfer += oprot->writeI32((*(this->utt_type1)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 3);
+  xfer += oprot->writeFieldBegin("utt2", ::apache::thrift::protocol::T_LIST, 4);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I16, static_cast<uint32_t>((*(this->utt2)).size()));
     std::vector<int16_t> ::const_iterator _iter66;
@@ -4132,7 +4208,11 @@ uint32_t kvpService_kvpTempVerifySpeakerByStream_pargs::write(::apache::thrift::
   }
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("samp_rate_2", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32((*(this->samp_rate_2)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("utt_type2", ::apache::thrift::protocol::T_I32, 6);
   xfer += oprot->writeI32((*(this->utt_type2)));
   xfer += oprot->writeFieldEnd();
 
@@ -5357,19 +5437,20 @@ bool kvpServiceClient::recv_kvpIsLicenceValid()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpIsLicenceValid failed: unknown result");
 }
 
-void kvpServiceClient::kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return, const std::vector<int16_t> & utt, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
+void kvpServiceClient::kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
 {
-  send_kvpRegisterSpeakerByStream(utt, vp_node, vp_dir, spk_id);
+  send_kvpRegisterSpeakerByStream(utt, samp_rate, vp_node, vp_dir, spk_id);
   recv_kvpRegisterSpeakerByStream(_return);
 }
 
-void kvpServiceClient::send_kvpRegisterSpeakerByStream(const std::vector<int16_t> & utt, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
+void kvpServiceClient::send_kvpRegisterSpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("kvpRegisterSpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
 
   kvpService_kvpRegisterSpeakerByStream_pargs args;
   args.utt = &utt;
+  args.samp_rate = &samp_rate;
   args.vp_node = &vp_node;
   args.vp_dir = &vp_dir;
   args.spk_id = &spk_id;
@@ -5418,19 +5499,20 @@ void kvpServiceClient::recv_kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpRegisterSpeakerByStream failed: unknown result");
 }
 
-void kvpServiceClient::kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
+void kvpServiceClient::kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
 {
-  send_kvpIdentifyTopSpeakerByStream(utt, vp_node_arr, node_num, top_n, utt_type);
+  send_kvpIdentifyTopSpeakerByStream(utt, samp_rate, vp_node_arr, node_num, top_n, utt_type);
   recv_kvpIdentifyTopSpeakerByStream(_return);
 }
 
-void kvpServiceClient::send_kvpIdentifyTopSpeakerByStream(const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
+void kvpServiceClient::send_kvpIdentifyTopSpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("kvpIdentifyTopSpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
 
   kvpService_kvpIdentifyTopSpeakerByStream_pargs args;
   args.utt = &utt;
+  args.samp_rate = &samp_rate;
   args.vp_node_arr = &vp_node_arr;
   args.node_num = &node_num;
   args.top_n = &top_n;
@@ -5480,19 +5562,20 @@ void kvpServiceClient::recv_kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _r
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpIdentifyTopSpeakerByStream failed: unknown result");
 }
 
-void kvpServiceClient::kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+void kvpServiceClient::kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
 {
-  send_kvpVerifySpeakerByStream(utt, spk_id, vp_node, utt_type);
+  send_kvpVerifySpeakerByStream(utt, samp_rate, spk_id, vp_node, utt_type);
   recv_kvpVerifySpeakerByStream(_return);
 }
 
-void kvpServiceClient::send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+void kvpServiceClient::send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("kvpVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
 
   kvpService_kvpVerifySpeakerByStream_pargs args;
   args.utt = &utt;
+  args.samp_rate = &samp_rate;
   args.spk_id = &spk_id;
   args.vp_node = &vp_node;
   args.utt_type = &utt_type;
@@ -5541,21 +5624,23 @@ void kvpServiceClient::recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "kvpVerifySpeakerByStream failed: unknown result");
 }
 
-void kvpServiceClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
+void kvpServiceClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t samp_rate_1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t samp_rate_2, const int32_t utt_type2)
 {
-  send_kvpTempVerifySpeakerByStream(utt1, utt_type1, utt2, utt_type2);
+  send_kvpTempVerifySpeakerByStream(utt1, samp_rate_1, utt_type1, utt2, samp_rate_2, utt_type2);
   recv_kvpTempVerifySpeakerByStream(_return);
 }
 
-void kvpServiceClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
+void kvpServiceClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t samp_rate_1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t samp_rate_2, const int32_t utt_type2)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("kvpTempVerifySpeakerByStream", ::apache::thrift::protocol::T_CALL, cseqid);
 
   kvpService_kvpTempVerifySpeakerByStream_pargs args;
   args.utt1 = &utt1;
+  args.samp_rate_1 = &samp_rate_1;
   args.utt_type1 = &utt_type1;
   args.utt2 = &utt2;
+  args.samp_rate_2 = &samp_rate_2;
   args.utt_type2 = &utt_type2;
   args.write(oprot_);
 
@@ -6512,7 +6597,7 @@ void kvpServiceProcessor::process_kvpRegisterSpeakerByStream(int32_t seqid, ::ap
 
   kvpService_kvpRegisterSpeakerByStream_result result;
   try {
-    iface_->kvpRegisterSpeakerByStream(result.success, args.utt, args.vp_node, args.vp_dir, args.spk_id);
+    iface_->kvpRegisterSpeakerByStream(result.success, args.utt, args.samp_rate, args.vp_node, args.vp_dir, args.spk_id);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -6566,7 +6651,7 @@ void kvpServiceProcessor::process_kvpIdentifyTopSpeakerByStream(int32_t seqid, :
 
   kvpService_kvpIdentifyTopSpeakerByStream_result result;
   try {
-    iface_->kvpIdentifyTopSpeakerByStream(result.success, args.utt, args.vp_node_arr, args.node_num, args.top_n, args.utt_type);
+    iface_->kvpIdentifyTopSpeakerByStream(result.success, args.utt, args.samp_rate, args.vp_node_arr, args.node_num, args.top_n, args.utt_type);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -6620,7 +6705,7 @@ void kvpServiceProcessor::process_kvpVerifySpeakerByStream(int32_t seqid, ::apac
 
   kvpService_kvpVerifySpeakerByStream_result result;
   try {
-    iface_->kvpVerifySpeakerByStream(result.success, args.utt, args.spk_id, args.vp_node, args.utt_type);
+    iface_->kvpVerifySpeakerByStream(result.success, args.utt, args.samp_rate, args.spk_id, args.vp_node, args.utt_type);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -6674,7 +6759,7 @@ void kvpServiceProcessor::process_kvpTempVerifySpeakerByStream(int32_t seqid, ::
 
   kvpService_kvpTempVerifySpeakerByStream_result result;
   try {
-    iface_->kvpTempVerifySpeakerByStream(result.success, args.utt1, args.utt_type1, args.utt2, args.utt_type2);
+    iface_->kvpTempVerifySpeakerByStream(result.success, args.utt1, args.samp_rate_1, args.utt_type1, args.utt2, args.samp_rate_2, args.utt_type2);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -8045,13 +8130,13 @@ bool kvpServiceConcurrentClient::recv_kvpIsLicenceValid(const int32_t seqid)
   } // end while(true)
 }
 
-void kvpServiceConcurrentClient::kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return, const std::vector<int16_t> & utt, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
+void kvpServiceConcurrentClient::kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
 {
-  int32_t seqid = send_kvpRegisterSpeakerByStream(utt, vp_node, vp_dir, spk_id);
+  int32_t seqid = send_kvpRegisterSpeakerByStream(utt, samp_rate, vp_node, vp_dir, spk_id);
   recv_kvpRegisterSpeakerByStream(_return, seqid);
 }
 
-int32_t kvpServiceConcurrentClient::send_kvpRegisterSpeakerByStream(const std::vector<int16_t> & utt, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
+int32_t kvpServiceConcurrentClient::send_kvpRegisterSpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -8059,6 +8144,7 @@ int32_t kvpServiceConcurrentClient::send_kvpRegisterSpeakerByStream(const std::v
 
   kvpService_kvpRegisterSpeakerByStream_pargs args;
   args.utt = &utt;
+  args.samp_rate = &samp_rate;
   args.vp_node = &vp_node;
   args.vp_dir = &vp_dir;
   args.spk_id = &spk_id;
@@ -8132,13 +8218,13 @@ void kvpServiceConcurrentClient::recv_kvpRegisterSpeakerByStream(Rpc_ModelInfo& 
   } // end while(true)
 }
 
-void kvpServiceConcurrentClient::kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
+void kvpServiceConcurrentClient::kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
 {
-  int32_t seqid = send_kvpIdentifyTopSpeakerByStream(utt, vp_node_arr, node_num, top_n, utt_type);
+  int32_t seqid = send_kvpIdentifyTopSpeakerByStream(utt, samp_rate, vp_node_arr, node_num, top_n, utt_type);
   recv_kvpIdentifyTopSpeakerByStream(_return, seqid);
 }
 
-int32_t kvpServiceConcurrentClient::send_kvpIdentifyTopSpeakerByStream(const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
+int32_t kvpServiceConcurrentClient::send_kvpIdentifyTopSpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -8146,6 +8232,7 @@ int32_t kvpServiceConcurrentClient::send_kvpIdentifyTopSpeakerByStream(const std
 
   kvpService_kvpIdentifyTopSpeakerByStream_pargs args;
   args.utt = &utt;
+  args.samp_rate = &samp_rate;
   args.vp_node_arr = &vp_node_arr;
   args.node_num = &node_num;
   args.top_n = &top_n;
@@ -8220,13 +8307,13 @@ void kvpServiceConcurrentClient::recv_kvpIdentifyTopSpeakerByStream(Rpc_TopSpeak
   } // end while(true)
 }
 
-void kvpServiceConcurrentClient::kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+void kvpServiceConcurrentClient::kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
 {
-  int32_t seqid = send_kvpVerifySpeakerByStream(utt, spk_id, vp_node, utt_type);
+  int32_t seqid = send_kvpVerifySpeakerByStream(utt, samp_rate, spk_id, vp_node, utt_type);
   recv_kvpVerifySpeakerByStream(_return, seqid);
 }
 
-int32_t kvpServiceConcurrentClient::send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
+int32_t kvpServiceConcurrentClient::send_kvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -8234,6 +8321,7 @@ int32_t kvpServiceConcurrentClient::send_kvpVerifySpeakerByStream(const std::vec
 
   kvpService_kvpVerifySpeakerByStream_pargs args;
   args.utt = &utt;
+  args.samp_rate = &samp_rate;
   args.spk_id = &spk_id;
   args.vp_node = &vp_node;
   args.utt_type = &utt_type;
@@ -8307,13 +8395,13 @@ void kvpServiceConcurrentClient::recv_kvpVerifySpeakerByStream(Rpc_ScoreInfo& _r
   } // end while(true)
 }
 
-void kvpServiceConcurrentClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
+void kvpServiceConcurrentClient::kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t samp_rate_1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t samp_rate_2, const int32_t utt_type2)
 {
-  int32_t seqid = send_kvpTempVerifySpeakerByStream(utt1, utt_type1, utt2, utt_type2);
+  int32_t seqid = send_kvpTempVerifySpeakerByStream(utt1, samp_rate_1, utt_type1, utt2, samp_rate_2, utt_type2);
   recv_kvpTempVerifySpeakerByStream(_return, seqid);
 }
 
-int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2)
+int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std::vector<int16_t> & utt1, const int32_t samp_rate_1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t samp_rate_2, const int32_t utt_type2)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -8321,8 +8409,10 @@ int32_t kvpServiceConcurrentClient::send_kvpTempVerifySpeakerByStream(const std:
 
   kvpService_kvpTempVerifySpeakerByStream_pargs args;
   args.utt1 = &utt1;
+  args.samp_rate_1 = &samp_rate_1;
   args.utt_type1 = &utt_type1;
   args.utt2 = &utt2;
+  args.samp_rate_2 = &samp_rate_2;
   args.utt_type2 = &utt_type2;
   args.write(oprot_);
 

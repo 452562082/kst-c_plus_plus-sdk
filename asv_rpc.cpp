@@ -360,7 +360,7 @@ bool AsvRpcEngine::KvpIsLicenceValid()
 	}
 }
 
-_Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const string& vp_node, const string& spk_id)
+_Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const string& vp_node, const string& spk_id)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
@@ -369,7 +369,7 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16
 		}
 
 		Rpc_ModelInfo info;
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByStream(info, utt, vp_node, "", spk_id);
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByStream(info, utt, samp_rate, vp_node, "", spk_id);
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ModelInfo__extract(info);
 	}catch(std::exception ex){
@@ -377,7 +377,7 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16
 	}
 }
 
-_Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vector<int16_t>& utt, const std::vector<std::string>& node_list, int node_num, int top_n, int utt_type)
+_Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const std::vector<std::string>& node_list, int node_num, int top_n, int utt_type)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
@@ -386,7 +386,7 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vect
 		}
 
 		Rpc_TopSpeakerInfo info;
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpIdentifyTopSpeakerByStream(info, utt, node_list, node_num, top_n, utt_type);
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpIdentifyTopSpeakerByStream(info, utt, samp_rate, node_list, node_num, top_n, utt_type);
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_TopSpeakerInfo__extract(info);
 	}catch(std::exception ex){
@@ -394,7 +394,7 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vect
 	}
 }
 
-_Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, int32_t utt_type1, std::vector<int16_t> utt2, int32_t utt_type2)
+_Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
 {
 	try{
 		WaitForSingleObject(m_mutex, INFINITE);
@@ -403,7 +403,24 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int
 		}
 
 		Rpc_ScoreInfo info;
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpTempVerifySpeakerByStream(info, utt1, utt_type1, utt2, utt_type2);
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpVerifySpeakerByStream(info, utt, samp_rate, spk_id, vp_node, utt_type);
+		ReleaseMutex(m_mutex);
+		return asv_types_pack::Rpc_ScoreInfo__extract(info);
+	}catch(std::exception ex){
+		std::cout << "Error:" << ex.what() <<std::endl;
+	}
+}
+
+_Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, const int32_t samp_rate_1, int32_t utt_type1, std::vector<int16_t> utt2, const int32_t samp_rate_2, int32_t utt_type2)
+{
+	try{
+		WaitForSingleObject(m_mutex, INFINITE);
+		if(m_client_ptr == nullptr) {
+			throw new ClientNilException();
+		}
+
+		Rpc_ScoreInfo info;
+		static_cast<kvpServiceClient*>(m_client_ptr)->kvpTempVerifySpeakerByStream(info, utt1, samp_rate_1, utt_type1, utt2, samp_rate_2, utt_type2);
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){

@@ -260,6 +260,7 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * 注册说话人（二进制流格式）。
    * 
    * @param [in] utt 语音路径。
+   * @param [in] samp_rate 语音数据采样率。
    * @param [in] vp_node 说话人待注册库节点名称。
    * @param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
    * @param [in] spk_id 说话人ID。
@@ -267,11 +268,12 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * @return Rpc_ModelInfo 说话人模型信息。
    * 
    * @param utt
+   * @param samp_rate
    * @param vp_node
    * @param vp_dir
    * @param spk_id
    */
-  void kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return, const std::vector<int16_t> & utt, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id) {
+  void kvpRegisterSpeakerByStream(Rpc_ModelInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& vp_node, const std::string& vp_dir, const std::string& spk_id) {
     // Your implementation goes here
     printf("kvpRegisterSpeakerByStream\n");
   }
@@ -280,6 +282,7 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * 说话人辨认（二进制流格式）。
    * 
    * @param [in] utt 语音流。
+   * @param [in] samp_rate 语音数据采样率。
    * @param [in] node_list 库节点列表。
    *  @param [in] node_num 库节点数目。
    * @param [in] top_n Top n数目。
@@ -288,12 +291,13 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * @return Rpc_TopSpeakerInfo Top n得分信息
    * 
    * @param utt
+   * @param samp_rate
    * @param vp_node_arr
    * @param node_num
    * @param top_n
    * @param utt_type
    */
-  void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type) {
+  void kvpIdentifyTopSpeakerByStream(Rpc_TopSpeakerInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::vector<std::string> & vp_node_arr, const int32_t node_num, const int32_t top_n, const int32_t utt_type) {
     // Your implementation goes here
     printf("kvpIdentifyTopSpeakerByStream\n");
   }
@@ -302,6 +306,7 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * 说话人确认（二进制流格式）。
    * 
    * @param [in] utt 语音流。
+   * @param [in] samp_rate 语音数据采样率。
    *  @param [in] spk_id 说话人ID。
    * @param [in] vp_node 库节点。
    * @param [in] utt_type 语音场景类型。
@@ -309,11 +314,12 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * @return Rpc_ScoreInfo 得分信息
    * 
    * @param utt
+   * @param samp_rate
    * @param spk_id
    * @param vp_node
    * @param utt_type
    */
-  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type) {
+  void kvpVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type) {
     // Your implementation goes here
     printf("kvpVerifySpeakerByStream\n");
   }
@@ -322,18 +328,22 @@ class kvpServiceHandler : virtual public kvpServiceIf {
    * 1:1验证(给定2段语音流进行比较)。
    * 
    * @param [in] utt1 第1段语音流。
+   * @param [in] utt1 samp_rate_1 语音数据采样率。
    * @param [in] utt_type1 指定第1段语音场景类型。
    * @param [in] utt2  第2段语音流。
+   * @param [in] utt2 samp_rate_2 语音数据采样率。
    * @param [in] utt_type2 指定第2段语音场景类型。
    * 
    * @return Rpc_ScoreInfo 验证得分信息
    * 
    * @param utt1
+   * @param samp_rate_1
    * @param utt_type1
    * @param utt2
+   * @param samp_rate_2
    * @param utt_type2
    */
-  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t utt_type2) {
+  void kvpTempVerifySpeakerByStream(Rpc_ScoreInfo& _return, const std::vector<int16_t> & utt1, const int32_t samp_rate_1, const int32_t utt_type1, const std::vector<int16_t> & utt2, const int32_t samp_rate_2, const int32_t utt_type2) {
     // Your implementation goes here
     printf("kvpTempVerifySpeakerByStream\n");
   }
