@@ -6,6 +6,7 @@
 #include "thrift/transport/TBufferTransports.h"
 #include "thrift/protocol/TBinaryProtocol.h"
 #include "asv_types_pack.h"
+#include "Logger.h"
 
 using namespace apache::thrift;
 using namespace apache::thrift::protocol;
@@ -15,9 +16,11 @@ using boost::shared_ptr;
 
 typedef unsigned char byte;
 
+Common::Logger logger("./Sdk_Log");
 DWORD WINAPI run(LPVOID lpParam)
 {
 	AsvRpcEngine* engine = (AsvRpcEngine*)lpParam;
+	
 	while(true)
 	{
 		boost::shared_ptr<TSocket> socket(new TSocket(engine->getIp(), engine->getPort()));
@@ -30,13 +33,15 @@ DWORD WINAPI run(LPVOID lpParam)
 			transport->open();
 			checkConnOK = true;
 		}catch(TTransportException ex) {
-			std::cout << "Error:" << ex.what() << std::endl;
+			char buf[MAX_STR_LEN];
+			sprintf(buf,"transport open exception:%s",ex.what());
+			logger.TraceError(buf);
 			socket->close();
 			transport->close();
 		}
 
 		int interval = engine->getInterval();
-		while(!engine->IsConnect()){
+		while(engine->IsConnect()){
 			try{
 				Sleep(interval);
 
@@ -56,7 +61,9 @@ DWORD WINAPI run(LPVOID lpParam)
 					engine->reset();
 				}
 			}catch(TException ex){
-				std::cout << "Error:" << ex.what() << std::endl;
+				char buf[MAX_STR_LEN];
+				sprintf(buf,"HeartRate exception:%s",ex.what());
+				logger.TraceError(buf);
 				socket->close();
 				transport->close();
 				checkConnOK = false;
@@ -66,20 +73,23 @@ DWORD WINAPI run(LPVOID lpParam)
 	}
 }
 
-AsvRpcEngine::AsvRpcEngine(const char* ip, int port, int interval) : m_isConnect(false)
+AsvRpcEngine::AsvRpcEngine(const std::string& ip, int port, int interval) : m_isConnect(false)
 {
 	m_ip = ip;
 	m_port = port;
 	m_interval = interval;
 	m_mutex = CreateMutex(nullptr, FALSE, nullptr);
 	connect();
-	HANDLE hThread = CreateThread(NULL,0,run,this,0,NULL);
+
+	m_run_thread = CreateThread(NULL,0,run,this,0,NULL);
+	logger.SetLogLevel(Common::LogLevelNormal);
 }
 
 AsvRpcEngine::~AsvRpcEngine()
 {
 	close();
 	CloseHandle(m_mutex);
+	CloseHandle(m_run_thread);
 }
 
 void AsvRpcEngine::connect()
@@ -169,7 +179,9 @@ _Rpc_UttInfo* AsvRpcEngine::KvpGetUttInfo(const std::string& wav_path)
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_UttInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpGetUttInfo exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -184,7 +196,9 @@ int32_t AsvRpcEngine::KvpModelRemoveBySpkid(const string& vp_node, const string&
 		ReleaseMutex(m_mutex);
 		return ret;
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpModelRemoveBySpkid exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -200,7 +214,9 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByFile(const string& utt, const 
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ModelInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpRegisterSpeakerByFile exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -216,7 +232,9 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByFile(const string& utt, const st
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpVerifySpeakerByFile exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -232,7 +250,9 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByFile(const string& utt1, int
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpTempVerifySpeakerByFile exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -249,7 +269,9 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByFile(const string& utt
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_TopSpeakerInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpIdentifyTopSpeakerByFile exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -264,7 +286,9 @@ int32_t AsvRpcEngine::KvpIvectorLoadByFile(const string& vp_node, const string& 
 		ReleaseMutex(m_mutex);
 		return ret;
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpIvectorLoadByFile exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -279,7 +303,9 @@ int32_t AsvRpcEngine::KvpInsertNode(const string& vp_node)
 		ReleaseMutex(m_mutex);
 		return ret;
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpInsertNode exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -294,7 +320,26 @@ int32_t AsvRpcEngine::KvpDeleteNode(const string& vp_node)
 		ReleaseMutex(m_mutex);
 		return ret;
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpDeleteNode exception:%s",ex.what());
+		logger.TraceError(buf);
+	}
+}
+
+int32_t AsvRpcEngine::KvpMoveNode(const string& spk_id, const string& origin, const string& target)
+{
+	try{
+		WaitForSingleObject(m_mutex, INFINITE);
+		if(m_client_ptr == nullptr){
+			throw new ClientNilException();
+		}
+		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpMoveNode(spk_id,origin,target);
+		ReleaseMutex(m_mutex);
+		return ret;
+	}catch(std::exception ex){
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpMoveNode exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -310,7 +355,9 @@ string AsvRpcEngine::KvpGetFingerprint()
 		ReleaseMutex(m_mutex);
 		return fingerprint_str.c_str();
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpGetFingerprint exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -326,7 +373,9 @@ _Rpc_LicenceInfo* AsvRpcEngine::KvpGetLicenceInfo()
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_LicenceInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpGetLicenceInfo exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -341,7 +390,9 @@ int32_t AsvRpcEngine::KvpSetLicence(const string& licence)
 		ReleaseMutex(m_mutex);
 		return ret;
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpSetLicence exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -356,7 +407,9 @@ bool AsvRpcEngine::KvpIsLicenceValid()
 		ReleaseMutex(m_mutex);
 		return flag;
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpIsLicenceValid exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -373,7 +426,9 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ModelInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpRegisterSpeakerByStream exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -390,7 +445,9 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vect
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_TopSpeakerInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpIdentifyTopSpeakerByStream exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -407,7 +464,9 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByStream(const std::vector<int16_t
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() <<std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpVerifySpeakerByStream exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -424,7 +483,9 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"KvpTempVerifySpeakerByStream exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }
 
@@ -433,6 +494,8 @@ void AsvRpcEngine::Delete_Asv_Type(_Asv_Type type,void* ptr)
 	try{
 		asv_types_pack::_Asv_Type__delete(type, ptr);
 	}catch(std::exception ex){
-		std::cout << "Error:" << ex.what() << std::endl;
+		char buf[MAX_STR_LEN];
+		sprintf(buf,"Delete_Asv_Type exception:%s",ex.what());
+		logger.TraceError(buf);
 	}
 }

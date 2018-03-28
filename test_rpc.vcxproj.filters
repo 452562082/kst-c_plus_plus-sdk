@@ -16,6 +16,9 @@
     <ClCompile Include="gen-cpp\kvpService.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gen-cpp\asv_constants.h">
@@ -34,6 +37,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="test_rpc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

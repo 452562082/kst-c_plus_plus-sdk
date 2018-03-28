@@ -88,6 +88,7 @@
     <ClCompile Include="gen-cpp\asv_constants.cpp" />
     <ClCompile Include="gen-cpp\asv_types.cpp" />
     <ClCompile Include="gen-cpp\kvpService.cpp" />
+    <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="asv_rpc.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="gen-cpp\asv_constants.h" />
     <ClInclude Include="gen-cpp\asv_types.h" />
     <ClInclude Include="gen-cpp\kvpService.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="test_rpc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
