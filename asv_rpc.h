@@ -166,8 +166,8 @@ public:
 	bool IsConnect();
 	//重连
 	void reset();
-	//心跳检测
-	string KvpPing();
+	////心跳检测
+	//string KvpPing();
 private:
 	void connect();
 	void close();

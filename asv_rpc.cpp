@@ -26,7 +26,7 @@ DWORD WINAPI run(LPVOID lpParam)
 		boost::shared_ptr<TSocket> socket(new TSocket(engine->getIp(), engine->getPort()));
 		boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
 		boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-		kvpServiceClient client(protocol);
+		boost::shared_ptr<kvpServiceClient> client(new kvpServiceClient(protocol));
 
 		bool checkConnOK = false;
 		try{
@@ -50,13 +50,14 @@ DWORD WINAPI run(LPVOID lpParam)
 					boost::shared_ptr<TSocket> socket(new TSocket(engine->getIp(), engine->getPort()));
 					boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
 					boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-					kvpServiceClient client(protocol);
+					client = boost::shared_ptr<kvpServiceClient>(new kvpServiceClient(protocol));
 					transport->open();	
 					checkConnOK = true;
 					engine->reset();
 				}
 
-				string ret = engine->KvpPing();
+				string ret = "";
+				client.get()->kvpPing(ret);
 				if(ret == ""){
 					engine->reset();
 				}
@@ -154,26 +155,27 @@ void AsvRpcEngine::reset()
 	connect();
 }
 
-string AsvRpcEngine::KvpPing()
-{
-	WaitForSingleObject(m_mutex, INFINITE);
-	if(m_client_ptr){
-		string ret = "";
-		static_cast<kvpServiceClient*>(m_client_ptr)->kvpPing(ret);
-		return ret;
-	}
-	ReleaseMutex(m_mutex);
-	return "";
-}
+//string AsvRpcEngine::KvpPing()
+//{
+//	WaitForSingleObject(m_mutex, INFINITE);
+//	if(!m_client_ptr){
+//		string ret = "";
+//		static_cast<kvpServiceClient*>(m_client_ptr)->kvpPing(ret);
+//		ReleaseMutex(m_mutex);
+//		return ret;
+//	}
+//	ReleaseMutex(m_mutex);
+//	return "";
+//}
 
 _Rpc_UttInfo* AsvRpcEngine::KvpGetUttInfo(const std::string& wav_path)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(!m_client_ptr){
 			throw new ClientNilException();
 		}
 
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_UttInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpGetUttInfo(info, wav_path);
 		ReleaseMutex(m_mutex);
@@ -188,10 +190,10 @@ _Rpc_UttInfo* AsvRpcEngine::KvpGetUttInfo(const std::string& wav_path)
 int32_t AsvRpcEngine::KvpModelRemoveBySpkid(const string& vp_node, const string& spk_id)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpModelRemoveBySpkid(vp_node,"",spk_id);
 		ReleaseMutex(m_mutex);
 		return ret;
@@ -205,10 +207,10 @@ int32_t AsvRpcEngine::KvpModelRemoveBySpkid(const string& vp_node, const string&
 _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByFile(const string& utt, const string& vp_node, const string& spk_id, int32_t sp_chan)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_ModelInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByFile(info, utt, vp_node, "", spk_id, sp_chan);
 		ReleaseMutex(m_mutex);
@@ -223,10 +225,10 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByFile(const string& utt, const 
 _Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByFile(const string& utt, const string& spk_id, const string& vp_node, int32_t utt_type, int32_t sp_chan)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_ScoreInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpVerifySpeakerByFile(info, utt, spk_id, vp_node, utt_type, sp_chan);
 		ReleaseMutex(m_mutex);
@@ -241,10 +243,10 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByFile(const string& utt, const st
 _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByFile(const string& utt1, int32_t sp_chan1, int32_t utt_type1, const string& utt2, int32_t sp_chan2, int32_t utt_type2)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_ScoreInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpTempVerifySpeakerByFile(info, utt1, sp_chan1, utt_type1, utt2, sp_chan2, utt_type2);
 		ReleaseMutex(m_mutex);
@@ -259,10 +261,10 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByFile(const string& utt1, int
 _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByFile(const string& utt, const vector<string> vp_node_arr, int32_t node_num, int32_t top_n, int32_t utt_type, int32_t sp_chan)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_TopSpeakerInfo info;
 		
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpIdentifyTopSpeakerByFile(info, utt, vp_node_arr, node_num, top_n, utt_type, sp_chan);
@@ -278,10 +280,10 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByFile(const string& utt
 int32_t AsvRpcEngine::KvpIvectorLoadByFile(const string& vp_node, const string& iv_file)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpIvectorLoadByFile(vp_node,iv_file);
 		ReleaseMutex(m_mutex);
 		return ret;
@@ -295,10 +297,10 @@ int32_t AsvRpcEngine::KvpIvectorLoadByFile(const string& vp_node, const string& 
 int32_t AsvRpcEngine::KvpInsertNode(const string& vp_node)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpInsertNode(vp_node);
 		ReleaseMutex(m_mutex);
 		return ret;
@@ -312,10 +314,10 @@ int32_t AsvRpcEngine::KvpInsertNode(const string& vp_node)
 int32_t AsvRpcEngine::KvpDeleteNode(const string& vp_node)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpDeleteNode(vp_node);
 		ReleaseMutex(m_mutex);
 		return ret;
@@ -329,10 +331,10 @@ int32_t AsvRpcEngine::KvpDeleteNode(const string& vp_node)
 int32_t AsvRpcEngine::KvpMoveNode(const string& spk_id, const string& origin, const string& target)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpMoveNode(spk_id,origin,target);
 		ReleaseMutex(m_mutex);
 		return ret;
@@ -346,10 +348,10 @@ int32_t AsvRpcEngine::KvpMoveNode(const string& spk_id, const string& origin, co
 string AsvRpcEngine::KvpGetFingerprint()
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		std::string fingerprint_str;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpGetFingerprint(fingerprint_str);
 		ReleaseMutex(m_mutex);
@@ -364,10 +366,10 @@ string AsvRpcEngine::KvpGetFingerprint()
 _Rpc_LicenceInfo* AsvRpcEngine::KvpGetLicenceInfo()
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_LicenceInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->KvpGetLicenceInfo(info);
 		ReleaseMutex(m_mutex);
@@ -382,10 +384,10 @@ _Rpc_LicenceInfo* AsvRpcEngine::KvpGetLicenceInfo()
 int32_t AsvRpcEngine::KvpSetLicence(const string& licence)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		int32_t ret = static_cast<kvpServiceClient*>(m_client_ptr)->kvpSetLicence(licence);
 		ReleaseMutex(m_mutex);
 		return ret;
@@ -399,10 +401,10 @@ int32_t AsvRpcEngine::KvpSetLicence(const string& licence)
 bool AsvRpcEngine::KvpIsLicenceValid()
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
+		WaitForSingleObject(m_mutex, INFINITE);
 		bool flag = static_cast<kvpServiceClient*>(m_client_ptr)->kvpIsLicenceValid();
 		ReleaseMutex(m_mutex);
 		return flag;
@@ -416,11 +418,11 @@ bool AsvRpcEngine::KvpIsLicenceValid()
 _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const string& vp_node, const string& spk_id)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr){
 			throw new ClientNilException();
 		}
 
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_ModelInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpRegisterSpeakerByStream(info, utt, samp_rate, vp_node, "", spk_id);
 		ReleaseMutex(m_mutex);
@@ -435,11 +437,11 @@ _Rpc_ModelInfo* AsvRpcEngine::KvpRegisterSpeakerByStream(const std::vector<int16
 _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const std::vector<std::string>& node_list, int node_num, int top_n, int utt_type)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
 
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_TopSpeakerInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpIdentifyTopSpeakerByStream(info, utt, samp_rate, node_list, node_num, top_n, utt_type);
 		ReleaseMutex(m_mutex);
@@ -454,13 +456,14 @@ _Rpc_TopSpeakerInfo* AsvRpcEngine::KvpIdentifyTopSpeakerByStream(const std::vect
 _Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByStream(const std::vector<int16_t> & utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
 
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_ScoreInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpVerifySpeakerByStream(info, utt, samp_rate, spk_id, vp_node, utt_type);
+		std::cout << "22222" << std::endl;
 		ReleaseMutex(m_mutex);
 		return asv_types_pack::Rpc_ScoreInfo__extract(info);
 	}catch(std::exception ex){
@@ -473,11 +476,11 @@ _Rpc_ScoreInfo* AsvRpcEngine::KvpVerifySpeakerByStream(const std::vector<int16_t
 _Rpc_ScoreInfo* AsvRpcEngine::KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, const int32_t samp_rate_1, int32_t utt_type1, std::vector<int16_t> utt2, const int32_t samp_rate_2, int32_t utt_type2)
 {
 	try{
-		WaitForSingleObject(m_mutex, INFINITE);
 		if(m_client_ptr == nullptr) {
 			throw new ClientNilException();
 		}
 
+		WaitForSingleObject(m_mutex, INFINITE);
 		Rpc_ScoreInfo info;
 		static_cast<kvpServiceClient*>(m_client_ptr)->kvpTempVerifySpeakerByStream(info, utt1, samp_rate_1, utt_type1, utt2, samp_rate_2, utt_type2);
 		ReleaseMutex(m_mutex);
