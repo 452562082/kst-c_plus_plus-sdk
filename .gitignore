@@ -3,3 +3,5 @@
 /.vs
 /ipch
 /test_rpc.vcxproj.user
+/kst-c++-sdk.sdf
+/kst-c++-sdk.suo
